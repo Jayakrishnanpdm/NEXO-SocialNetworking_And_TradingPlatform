@@ -1,0 +1,45 @@
+{% extends 'baselayout.html' %}
+{% load static %}
+{% block content %}
+    <body>
+
+        <!-- Search Container -->
+        <div class="center-container">
+            <!-- Search Bar -->
+            <div class="search-container">
+              <input type="text" id="search-input" placeholder="Search product name here...">
+              <button id="search">Search</button>
+            </div>
+          
+            <!-- Category Buttons -->
+            <div class="category-buttons">
+              <button class="button-value actived">All</button>
+              <button class="button-value">Calculator</button>
+              <button class="button-value">Lab Coats</button>
+              <button class="button-value">Books</button>
+              <button class="button-value">Other Accessories</button>
+            </div>
+          </div>          
+        <!-- Product Grid -->
+        <section id="product1" class="section-p1">
+          <div class="pro-container">
+              <div class="pro">
+                  <img src="{% static 'css/img/products/f1.jpg' %}" alt="">
+                  <div class="des">
+                      <span>casio</span>
+                      <h5>Casio fx-83gtx</h5>
+                      <div class="star">
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                      </div>
+                      <h4>₹450</h4>
+                  </div>
+                  <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
+              </div>
+        </div> 
+        </section> 
+    </body>
+    {% endblock %}       
+</html>

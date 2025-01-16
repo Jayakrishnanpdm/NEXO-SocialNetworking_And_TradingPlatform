@@ -1,0 +1,35 @@
+{% extends 'baselayout.html' %}
+{% load static %}
+{% block content %}
+    <body>    
+        <section id="prodetails" class="section-p1">
+            <div class="single-pro-image">
+                <img src="{% static 'css/img/products/f1.jpg' %}" width="100%"  id="MainImg" alt="">
+                <div class="small-img-group">
+                    <div class="small-img-col">
+                        <img src="{% static 'css/img/products/f3.jpg' %}" width="100%" class="small-img" alt="">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="{% static 'css/img/products/f4.jpg' %}" width="100%" class="small-img" alt="">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="{% static 'css/img/products/f5.jpg' %}" width="100%" class="small-img" alt="">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="{% static 'css/img/products/f6.jpg' %}" width="100%" class="small-img" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-pro-details">
+                <h6>Home/ Calculator</h6>
+                <h4>Casio</h4>
+                <h2>₹150</h2>
+                <button class="normal">Add to Cart</button>
+                <h4>Product Details</h4>
+                <span>4-times better resolution than Casio 991ES Plus for easier viewing of long expressionsNatural Textbook Display- Input and display fractions, powers, logarithms, roots, and other mathematical formulas and symbol just as they appear in textbooks Scientific Calculator with inbuilt QR Code function --Calculator can generate QR Code -- Useful from graphical visualization & accessing user manual using your smart phone</span>
+            </div>
+        </section>
+    </body>
+{% endblock %}
+</html>
