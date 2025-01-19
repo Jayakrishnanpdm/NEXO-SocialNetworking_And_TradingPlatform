@@ -1,0 +1,60 @@
+{% extends 'baselayout.html' %}
+{% load static %}
+{% block content %}
+<body>
+    <section id="page-header3">
+        <h2>#Become a Seller</h2>
+        <p>Sell Online with Nexo</p>
+    </section>
+    <section id="seller-form" class="section-p1">
+        <div class="form-container">
+            <form id="sellForm">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+    
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" minlength="10" required>
+    
+                <label for="product">Product Name:</label>
+                <select id="product" name="product" required>
+                    <option class="pro-select" value="">Select a product</option>
+                    <option value="Calculator">Calculator</option>
+                    <option value="Lab Coat">Lab Coat</option>
+                    <option value="Books">Books</option>
+                    <option value="Other">Other</option>
+                </select>
+    
+                <div id="otherProductDiv" style="display: none;">
+                    <label for="otherProduct">Specify Product:</label>
+                    <input type="text" id="otherProduct" name="otherProduct" placeholder="Enter product name">
+                </div>
+    
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" placeholder="Enter price in INR" required>
+    
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" placeholder="Enter product description" required></textarea>
+    
+                <label for="primaryImage">Upload Primary Image:</label>
+                <input type="file" id="primaryImage" name="primaryImage" accept="image/*" required>
+    
+                <label for="additionalImages">Upload Additional Images (Max 3):</label>
+                <input type="file" id="additionalImages" name="additionalImages" accept="image/*" multiple>
+    
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </section>
+    
+    <section id="product-details" class="section-p1" style="display: none;">
+        <div id="productDisplay" class="product-box" style="border: 1px solid #ccc; padding: 20px; margin: 20px auto; max-width: 600px;">
+            <!-- Product details will be dynamically displayed here -->
+        </div>
+    </section>
+    <script src="{% static 'js/sell.js' %}"></script>
+</body>
+{% endblock %}
+</html>

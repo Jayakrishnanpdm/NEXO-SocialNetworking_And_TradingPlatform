@@ -9,3 +9,6 @@ def contact(request):
 
 def about(request):
     return render(request, 'about.html') # This is the view that will be rendered when the user visits the about page.
+
+def sell(request):
+    return render(request, 'sell.html') # This is the view that will be rendered when the user visits the sell page.

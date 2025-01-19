@@ -1,5 +1,6 @@
 # created by virtualenv automatically
-*# Python bytecode files
+
+# Python bytecode files
 *.pyc
 *.pyo
 *.pyd
@@ -17,7 +18,7 @@ media/
 # static/
 
 # Database
-db.sqlite3
+db.sqlite3  # Keep this ignored
 
 # Virtual environment
 venv/
@@ -40,4 +41,3 @@ Thumbs.db
 
 # Local configuration files
 *.env
-

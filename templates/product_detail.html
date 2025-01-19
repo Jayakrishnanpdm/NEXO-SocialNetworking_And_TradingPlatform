@@ -4,19 +4,19 @@
     <body>    
         <section id="prodetails" class="section-p1">
             <div class="single-pro-image">
-                <img src="{% static 'css/img/products/f1.jpg' %}" width="100%"  id="MainImg" alt="">
+                <img src="{% static 'img/products/f1.jpg' %}" width="100%"  id="MainImg" alt="">
                 <div class="small-img-group">
                     <div class="small-img-col">
-                        <img src="{% static 'css/img/products/f3.jpg' %}" width="100%" class="small-img" alt="">
+                        <img src="{% static 'img/products/f3.jpg' %}" width="100%" class="small-img" alt="">
                     </div>
                     <div class="small-img-col">
-                        <img src="{% static 'css/img/products/f4.jpg' %}" width="100%" class="small-img" alt="">
+                        <img src="{% static 'img/products/f4.jpg' %}" width="100%" class="small-img" alt="">
                     </div>
                     <div class="small-img-col">
-                        <img src="{% static 'css/img/products/f5.jpg' %}" width="100%" class="small-img" alt="">
+                        <img src="{% static 'img/products/f5.jpg' %}" width="100%" class="small-img" alt="">
                     </div>
                     <div class="small-img-col">
-                        <img src="{% static 'css/img/products/f6.jpg' %}" width="100%" class="small-img" alt="">
+                        <img src="{% static 'img/products/f6.jpg' %}" width="100%" class="small-img" alt="">
                     </div>
                 </div>
             </div>
@@ -30,6 +30,79 @@
                 <span>4-times better resolution than Casio 991ES Plus for easier viewing of long expressionsNatural Textbook Display- Input and display fractions, powers, logarithms, roots, and other mathematical formulas and symbol just as they appear in textbooks Scientific Calculator with inbuilt QR Code function --Calculator can generate QR Code -- Useful from graphical visualization & accessing user manual using your smart phone</span>
             </div>
         </section>
+
+        <section id="product1" class="section-p1">
+            <h2>Related Products</h2>
+            <p>New Gear, New Semester, New You!</p>
+            <div class="pro-container">
+                <div class="pro">
+                    <img src="{% static 'img/products/n1.jpg' %}" alt="">
+                    <div class="des">
+                        <span>adidas</span>
+                        <h5>Cartoon astronaut T-shirt</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>$78</h4>
+                    </div>
+                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
+                </div>
+                <div class="pro">
+                    <img src="{% static 'img/products/n2.jpg' %}" alt="">
+                    <div class="des">
+                        <span>adidas</span>
+                        <h5>Cartoon astronaut T-shirt</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>$78</h4>
+                    </div>
+                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
+                </div>
+                <div class="pro">
+                    <img src="{% static 'img/products/n3.jpg' %}" alt="">
+                    <div class="des">
+                        <span>adidas</span>
+                        <h5>Cartoon astronaut T-shirt</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>$78</h4>
+                    </div>
+                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            // script for image change on click
+
+            var MainImg = document.getElementById('MainImg');
+            var smallimg = document.getElementsByClassName('small-img');
+
+            smallimg[0].onclick = function () {
+                MainImg.src = smallimg[0].src;
+            }
+            smallimg[1].onclick = function () {
+                MainImg.src = smallimg[1].src;
+            }
+            smallimg[2].onclick = function () {
+                MainImg.src = smallimg[2].src;
+            }
+            smallimg[3].onclick = function () {
+                MainImg.src = smallimg[3].src;
+            }
+        </script>
+
     </body>
 {% endblock %}
 </html>

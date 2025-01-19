@@ -288,7 +288,7 @@ nav button svg {
     width: 100%;
     background-color: #111;
     position: relative;
-    background-image: url(img/change.png);
+    background-image: url(../img/about/change.png);
     background-size: cover;
     display: flex;
     align-items: center;

@@ -1,11 +1,11 @@
 {% load static %}
 <section id="header">
-    <a href="#"><img src="{% static 'css/img/logo.png' %}" class="logo" alt=""></a>
+    <a href="#"><img src="{% static 'img/home/logo.png' %}" class="logo" alt=""></a>
     <div>
         <ul id="navbar">
             <li><a class="active" href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'products' %}">Shop</a></li>
-            <li><a href="blog.html">Sell</a></li>
+            <li><a href="{% url 'sell' %}">Sell</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
             <li id="lg-bag"><a href="{% url 'cart' %}"><i class="fa-solid fa-bag-shopping"></i></a></li>
