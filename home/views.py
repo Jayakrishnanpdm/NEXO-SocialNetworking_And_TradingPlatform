@@ -4,7 +4,7 @@ from Products.models import Product, ProductImage
 # Create your views here.
 def home(request):
     products_with_images_priority = []
-    for product in Product.objects.filter(priority__lt=5).order_by('priority'):
+    for product in Product.objects.filter(priority__lt=5).order_by('priority')[:4]:
         first_image = product.images.first()  # Use the related_name 'images' to get images
         products_with_images_priority.append({
             'product': product,

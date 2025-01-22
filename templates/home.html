@@ -44,7 +44,7 @@
                 {% for item in products_with_images_priority %}
                     <div class="pro" data-model="{{ item.product.model }}">
                         {% if item.image %}
-                            <img src="{{ item.image }}" alt="{{ item.product.name }}">
+                           <a href="{% url 'product_detail' item.product.id  %}"><img src="{{ item.image }}" alt="{{ item.product.name }}"></a>
                         {% else %}
                             <img src="{% static 'img/products/placeholder.jpg' %}" alt="No image available">
                         {% endif %}
@@ -72,7 +72,7 @@
                 {% for item in products_with_images_id %}
                     <div class="pro" data-model="{{ item.product.model }}">
                         {% if item.image %}
-                            <img src="{{ item.image }}" alt="{{ item.product.name }}">
+                        <a href="{% url 'product_detail' item.product.id %}"><img src="{{ item.image }}" alt="{{ item.product.name }}"></a>
                         {% else %}
                             <img src="{% static 'img/products/placeholder.jpg' %}" alt="No image available">
                         {% endif %}

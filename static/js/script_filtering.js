@@ -4,14 +4,12 @@ let filteredProducts = []; // To store filtered products
 
 // Function to handle pagination logic
 function paginateProducts() {
-  // If there are no filtered products, fallback to all products
   const products = filteredProducts.length > 0 ? filteredProducts : document.querySelectorAll(".pro");
   const totalProducts = products.length;
   const totalPages = Math.ceil(totalProducts / productsPerPage);
 
   // Hide all products initially
-  const allProducts = document.querySelectorAll(".pro");
-  allProducts.forEach((product) => {
+  document.querySelectorAll(".pro").forEach((product) => {
     product.style.display = "none";
   });
 
@@ -19,24 +17,25 @@ function paginateProducts() {
   const start = (currentPage - 1) * productsPerPage;
   const end = start + productsPerPage;
   for (let i = start; i < end && i < totalProducts; i++) {
-    products[i].style.display = ""; // Show filtered products
+    products[i].style.display = "block";
   }
 
   // Update pagination buttons
   const paginationContainer = document.getElementById("pagination");
   paginationContainer.innerHTML = ""; // Clear previous buttons
 
-  // Ensure pagination buttons are updated based on the filtered products
-  for (let i = 1; i <= totalPages; i++) {
-    const button = document.createElement("button");
-    button.innerText = i;
-    button.className = "pagination-button";
-    if (i === currentPage) button.classList.add("active");
-    button.addEventListener("click", () => {
-      currentPage = i;
-      paginateProducts();
-    });
-    paginationContainer.appendChild(button);
+  if (totalPages > 1) {
+    for (let i = 1; i <= totalPages; i++) {
+      const button = document.createElement("button");
+      button.innerText = i;
+      button.className = "pagination-button";
+      if (i === currentPage) button.classList.add("active");
+      button.addEventListener("click", () => {
+        currentPage = i;
+        paginateProducts();
+      });
+      paginationContainer.appendChild(button);
+    }
   }
 }
 
@@ -48,7 +47,7 @@ function filterProducts() {
 
   // Filter products based on search value
   products.forEach((product) => {
-    const model = product.getAttribute("data-model").toLowerCase();
+    const model = product.getAttribute("data-name").toLowerCase();
     if (model.includes(searchValue)) {
       filteredProducts.push(product);
       product.style.display = ""; // Show matching product
@@ -57,9 +56,12 @@ function filterProducts() {
     }
   });
 
+
   // Show or hide "No products found" message
-  document.getElementById("no-products").style.display =
-    filteredProducts.length === 0 ? "block" : "none"; // Show if no products found
+  const noProducts = document.getElementById("no-products");
+  if (noProducts) {
+    noProducts.style.display = filteredProducts.length === 0 ? "block" : "none";
+  }
 
   currentPage = 1; // Reset to the first page
   paginateProducts(); // Re-apply pagination after filtering
@@ -74,10 +76,13 @@ function filterCategory(category) {
   buttons.forEach((button) => button.classList.remove("actived"));
 
   // Highlight the selected category button
-  document.querySelector(`.button-value[onclick="filterCategory('${category}')"]`).classList.add("actived");
+  const selectedButton = Array.from(buttons).find((button) =>
+    button.getAttribute("onclick").includes(category)
+  );
+  if (selectedButton) selectedButton.classList.add("actived");
 
   // Filter products based on category
-  filteredProducts = []; // Reset filtered products array
+  filteredProducts = [];
   products.forEach((product) => {
     const productModel = product.getAttribute("data-model").toLowerCase();
     const isVisible = category === "all" || productModel === category.toLowerCase();
@@ -90,25 +95,28 @@ function filterCategory(category) {
   });
 
   // Show or hide "No products found" message
-  document.getElementById("no-products").style.display =
-    filteredProducts.length === 0 ? "block" : "none"; // Show if no products found
+  const noProducts = document.getElementById("no-products");
+  if (noProducts) {
+    noProducts.style.display = filteredProducts.length === 0 ? "block" : "none";
+  }
 
   currentPage = 1; // Reset to the first page
   paginateProducts(); // Re-apply pagination after filtering
 }
 
-// Function to show all products
+// Function to reset all filters and show all products
 function showAllProducts() {
-  // Reset filtered products array and show all products
-  filteredProducts = [];
-  const products = document.querySelectorAll(".pro");
-  products.forEach(product => product.style.display = "");
-  
+  filteredProducts = []; // Reset filtered products
+  document.querySelectorAll(".pro").forEach((product) => {
+    product.style.display = "";
+  });
+
   currentPage = 1; // Reset to the first page
   paginateProducts(); // Re-apply pagination for all products
 }
 
-// Initialize pagination on page load
+// Initialize the script on page load
 document.addEventListener("DOMContentLoaded", () => {
-  paginateProducts();
+  paginateProducts(); // Initial pagination setup
 });
+
