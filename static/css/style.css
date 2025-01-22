@@ -1145,3 +1145,46 @@ select{
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
+#product1 img{
+  height:250px;
+ width:250px;
+ }
+
+/* pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center; /* Centers the pagination buttons horizontally */
+  align-items: center;
+  margin: 20px 0; /* Adds spacing above and below the pagination controls */
+  gap: 10px; /* Space between pagination buttons */
+}
+
+.pagination-container button {
+  padding: 10px 15px; /* Button padding */
+  font-size: 16px; /* Font size for buttons */
+  border: 1px solid #ddd; /* Border styling */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #f9f9f9; /* Light background color */
+  color: #333; /* Text color */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
+}
+
+.pagination-container button:hover {
+  background-color: #6f42c1; /* Hover background color */
+  color: #fff; /* Hover text color */
+}
+
+.pagination-container button.active {
+  background-color: #6f42c1; /* Active page button background color */
+  color: #fff; /* Active page button text color */
+  border-color: #6f42c1; /* Border matches active color */
+}
+
+.pagination-container button:disabled {
+  background-color: #e9ecef; /* Disabled button background */
+  color: #adb5bd; /* Disabled text color */
+  cursor: not-allowed; /* Prevent interaction */
+  border-color: #ddd; /* Maintain border for consistency */
+} 

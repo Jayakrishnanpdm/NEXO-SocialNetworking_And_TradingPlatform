@@ -41,127 +41,21 @@
             <h2>Featured Product</h2>
             <p>From books to gadgets, all in one place.</p>
             <div class="pro-container">
-                <div class="pro">
-                    <img src="{% static 'img/products/f1.jpg' %}" alt="">
-                    <div class="des">
-                        <span>casio</span>
-                        <h5>Casio fx-83gtx</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                {% for item in products_with_images_priority %}
+                    <div class="pro" data-model="{{ item.product.model }}">
+                        {% if item.image %}
+                            <img src="{{ item.image }}" alt="{{ item.product.name }}">
+                        {% else %}
+                            <img src="{% static 'img/products/placeholder.jpg' %}" alt="No image available">
+                        {% endif %}
+                        <div class="des">
+                            <span>{{ item.product.model }}</span>
+                            <h5>{{ item.product.name }}</h5>
+                            <h4>₹ {{ item.product.price }}</h4>
                         </div>
-                        <h4>₹450</h4>
+                        <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
                     </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/f2.png' %}" alt="">
-                    <div class="des">
-                        <span>oprat</span>
-                        <h5>ORPAT SC-417 SC 417</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₹300</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/f3.jpg' %}" alt="">
-                    <div class="des">
-                        <span>casio</span>
-                        <h5>CASIO FX-82MS Scientific Scientific Calculator</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₹750</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/f4.png' %}" alt="">
-                    <div class="des">
-                        <span>casio</span>
-                        <h5>CASIO FX-991CW Scientific Calculator</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₹900</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/f5.png' %}" alt="">
-                    <div class="des">
-                        <span>unix</span>
-                        <h5>Lab Coat/Apron Cotton White Colour</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₹78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/f6.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₹78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/f7.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₹78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/f8.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>₹78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-
+                {% endfor %}
             </div>
         </section>
 
@@ -175,127 +69,21 @@
             <h2>New Arrivals</h2>
             <p>New Gear, New Semester, New You!</p>
             <div class="pro-container">
-                <div class="pro">
-                    <img src="{% static 'img/products/n1.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                {% for item in products_with_images_id %}
+                    <div class="pro" data-model="{{ item.product.model }}">
+                        {% if item.image %}
+                            <img src="{{ item.image }}" alt="{{ item.product.name }}">
+                        {% else %}
+                            <img src="{% static 'img/products/placeholder.jpg' %}" alt="No image available">
+                        {% endif %}
+                        <div class="des">
+                            <span>{{ item.product.model }}</span>
+                            <h5>{{ item.product.name }}</h5>
+                            <h4>₹{{ item.product.price }}</h4>
                         </div>
-                        <h4>$78</h4>
+                        <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
                     </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/n2.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/n3.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/n4.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/n5.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/n6.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/n7.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-                <div class="pro">
-                    <img src="{% static 'img/products/n8.jpg' %}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>Cartoon astronaut T-shirt</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$78</h4>
-                    </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-                </div>
-
+                {% endfor %}
             </div>
         </section>
 

@@ -1,45 +1,47 @@
+
+
 {% extends 'baselayout.html' %}
 {% load static %}
 {% block content %}
-    <body>
+<div class="center-container">
+  <!-- Search Bar -->
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="Search product model here..." onkeyup="filterProducts()">
+    <button id="search" aria-label="Search Products">Search</button>
+  </div>
 
-        <!-- Search Container -->
-        <div class="center-container">
-            <!-- Search Bar -->
-            <div class="search-container">
-              <input type="text" id="search-input" placeholder="Search product name here...">
-              <button id="search">Search</button>
-            </div>
-          
-            <!-- Category Buttons -->
-            <div class="category-buttons">
-              <button class="button-value actived">All</button>
-              <button class="button-value">Calculator</button>
-              <button class="button-value">Lab Coats</button>
-              <button class="button-value">Books</button>
-              <button class="button-value">Other Accessories</button>
-            </div>
-          </div>          
-        <!-- Product Grid -->
-        <section id="product1" class="section-p1">
-          <div class="pro-container">
-              <div class="pro">
-                  <img src="{% static 'img/products/f1.jpg' %}" alt="">
-                  <div class="des">
-                      <span>casio</span>
-                      <h5>Casio fx-83gtx</h5>
-                      <div class="star">
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                      </div>
-                      <h4>₹450</h4>
-                  </div>
-                  <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-              </div>
-        </div> 
-        </section> 
-    </body>
-    {% endblock %}       
-</html>
+  <!-- Category Buttons -->
+  <div class="category-buttons">
+    <button class="button-value actived" onclick="filterCategory('all')">All</button>
+    <button class="button-value" onclick="filterCategory('Calculator')">Calculator</button>
+    <button class="button-value" onclick="filterCategory('Lab Coats')">Lab Coats</button>
+    <button class="button-value" onclick="filterCategory('Book')">Books</button>
+    <button class="button-value" onclick="filterCategory('Other')">Other Accessories</button>
+  </div>
+
+  <!-- Product Grid -->
+  <section id="product1" class="section-p1">
+    <div class="pro-container" id="product-container">
+      {% for item in products_with_images %}
+        <div class="pro" data-model="{{ item.product.model }}">
+          {% if item.image %}
+            <img src="{{ item.image }}" alt="{{ item.product.name }}">
+          {% else %}
+            <img src="{% static 'images/placeholder.jpg' %}" alt="No image available">
+          {% endif %}
+          <div class="des">
+            <span>{{ item.product.model }}</span>
+            <h5>{{ item.product.name }}</h5>
+            <h4>RS {{ item.product.price }}</h4>
+          </div>
+          <a href="#"><i class="fa-solid fa-cart-shopping cart" aria-label="Add to Cart"></i></a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  <div id="pagination" class="pagination-container"></div>
+</div>
+<script src="{% static 'js/script_filtering.js' %}"></script>
+{% endblock %}
+
+
