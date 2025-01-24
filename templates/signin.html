@@ -13,9 +13,10 @@
           </span>
         </h1>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
-        <form class="signup-form">
-          <input type="email" placeholder="Email address or User name" required>
-          <input type="password" placeholder="Password" required>
+        <form class="signup-form" method="post">
+          {% csrf_token %}
+          <input type="email" placeholder="Email address or User name" name="username_or_email" required>
+          <input type="password" placeholder="Password" name="password" required>
           <div class="remember-forgot">
             <label>
               <input type="checkbox"> Remember me
@@ -23,6 +24,13 @@
             <a href="#" class="forgot-password">Forgot your password?</a>
           </div>
           <button class="shiny-cta" type="submit"><span>Sign In</span></button>
+          {% if messages %}
+           <div>
+          {% for message in messages %}
+           <p style="color: red;">{{ message }}</p>
+          {% endfor %}
+          </div>
+          {% endif %}
         </form>
         <p class="form-para">Already have an account? <a href="{% url 'signup' %}">Create an account</a></p>
       </div>

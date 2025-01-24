@@ -21,4 +21,7 @@ from . import views
 urlpatterns = [
     path('signin/', views.signin, name='signin'),
     path('signup/', views.signup, name='signup'),
+    path('verify/', views.verify_otp, name='verify_otp'),
+    path('resend-otp/', views.resend_otp, name='resend_otp'),
+    path('logout/', views.logout, name='logout')
 ]

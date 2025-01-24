@@ -41,3 +41,7 @@ Thumbs.db
 
 # Local configuration files
 *.env
+
+# Ignore pipenv virtual environment
+/.venv
+
