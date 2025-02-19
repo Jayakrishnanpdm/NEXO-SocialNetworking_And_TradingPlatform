@@ -1,0 +1,12 @@
+asgiref==3.8.1
+Django==5.1.5
+django-redis==5.4.0
+pillow==11.1.0
+psycopg2==2.9.10
+python-decouple==3.8
+python-http-client==3.3.7
+redis==5.2.1
+sendgrid==6.11.0
+sqlparse==0.5.3
+starkbank-ecdsa==2.2.0
+tzdata==2024.2
