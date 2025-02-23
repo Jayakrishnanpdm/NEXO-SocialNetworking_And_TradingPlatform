@@ -567,7 +567,7 @@ button.white{
 #subtotal{
   width: 50%;
   margin-bottom: 30px;
-  border: 1px solid #e2e9e1;
+  border: 2px solid #e2e9e1;
   padding: 30px;
 }
 
@@ -579,7 +579,7 @@ button.white{
 
 #subtotal table td{
   width: 50%;
-  border: 1px solid #e2e9e1;
+  border: 2px solid #e2e9e1;
   padding: 10px;
   font-size: 13px;
 }

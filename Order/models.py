@@ -20,8 +20,8 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product,on_delete=models.SET_NULL,related_name='order_item',null=True)
-    order = models.ForeignKey(Order,on_delete=models.SET_NULL,related_name='order_item',null=True)
-    quantity = models.IntegerField(default=0)
+    order = models.ForeignKey(Order,on_delete=models.SET_NULL,related_name='items',null=True)
+    quantity = models.IntegerField(default=1)
     date_added = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

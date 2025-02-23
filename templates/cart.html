@@ -1,5 +1,6 @@
 {% extends 'baselayout.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
     <body>
         <section id="page-header2">
@@ -21,32 +22,16 @@
                     </tr>    
                 </thead>
                 <tbody>
+                    {% for item in order_items %}
                     <tr>
-                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                        <td><img src="{% static 'img/products/f1.jpg' %}" alt=""></td>
-                        <td>Product 1</td>
-                        <td>$100</td>
-                        <td><input type="number" value="1"></td>
-                        <td>$100</td>
+                        <td><a href="{% url 'removeItem' item.id %}"><i class="far fa-times-circle"></i></a></td>
+                        <td><img src="{{ item.product.images.first.image.url }}" alt=""></td>
+                        <td>{{ item.product.model }}</td>
+                        <td>{{ item.product.price }}</td>
+                        <td><input type="number" value="{{ item.quantity }}" readonly></td>
+                        <td>{{ item.product.price|subtotal:item.quantity }}</td>
                     </tr>
-
-                    <tr>
-                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                        <td><img src="{% static 'img/products/f1.jpg' %}" alt=""></td>
-                        <td>Product 1</td>
-                        <td>$100</td>
-                        <td><input type="number" value="1"></td>
-                        <td>$100</td>
-                    </tr>
-
-                    <tr>
-                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                        <td><img src="{% static 'img/products/f1.jpg' %}" alt=""></td>
-                        <td>Product 1</td>
-                        <td>$100</td>
-                        <td><input type="number" value="1"></td>
-                        <td>$100</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>
@@ -57,7 +42,7 @@
                 <table>
                     <tr>
                         <td>Cart Subtotal</td>
-                        <td>$300</td>
+                        <td>RS {{ total_price }}</td>
                     </tr>
                     <tr>
                         <td>Shipping</td>
@@ -65,7 +50,7 @@
                     </tr>
                     <tr>
                         <td><strong>Total</strong></td>
-                        <td><strong>$300</strong> </td>
+                        <td><strong>RS {{ total_price }}</strong> </td>
                     </tr>
                 </table>
                 <button class="normal">Proceed to checkout</button>

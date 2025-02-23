@@ -35,12 +35,16 @@
         <section class="full-form">
             <div class="form-container">
                 <h2>We love to hear from you</h2>
-                <form>
+                <form method="post" action="{% url 'contact' %}">
+                    {% csrf_token %}
                     <input type="text" name="name" placeholder="Your Name" required>
                     <input type="email" name="email" placeholder="E-mail" required>
                     <input type="text" name="subject" placeholder="Subject" required>
                     <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
                     <button type="submit">Submit</button>
+                    {% if sucess %}
+                        <p style="color: green;margin-left: 1px;">{{ sucess }}</p>
+                    {% endif %}
                 </form>
             </div>
         </section>
