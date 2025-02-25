@@ -32,7 +32,7 @@ def contact(request):
         message=request.POST.get('message')
         Contact.objects.create(name=name,email=email,subject=subject,message=message)
         sucess="Your message has been send successfully"
-    return render(request, 'contact.html',{'sucess':sucess}) 
+    return render(request, 'contact.html',{'success':success}) 
 
 def about(request): 
     return render(request, 'about.html')
