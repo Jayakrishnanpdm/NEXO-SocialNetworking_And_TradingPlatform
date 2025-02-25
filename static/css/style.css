@@ -1095,6 +1095,25 @@ ul{
   color: #fff;
 }
 
+
+#page-header4 {
+  background-image: url("../img/banner/payment1.jpg");
+  width: 100%; /* Ensures full viewport width */
+  height: 40vh; /* Ensures half the viewport height */
+  background-size: cover; /* Scales to cover the entire container */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents tiling */
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  padding: 14px;
+}
+#page-header4 h2,
+#page-header4 p{
+  color: #fff;
+}
+
 /* Seller Form */
 #seller-form .form-container {
   max-width: 600px;
@@ -1188,3 +1207,47 @@ select{
   cursor: not-allowed; /* Prevent interaction */
   border-color: #ddd; /* Maintain border for consistency */
 } 
+.payment-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers the buttons horizontally */
+  justify-content: center;
+  gap: 20px; /* Adds spacing between buttons */
+  margin-top: 30px;
+}
+
+.paymentbutton {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 50px; /* Makes the button rounded */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  width: 250px; /* Adjusts width to make buttons uniform */
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+}
+
+/* ✅ Green Button */
+.paymentbutton-green {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+}
+
+.paymentbutton-green:hover {
+  background: linear-gradient(135deg, #218838, #166534);
+  transform: scale(1.05);
+}
+
+/* ✅ Blue Button */
+.paymentbutton-blue {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+}
+
+.paymentbutton-blue:hover {
+  background: linear-gradient(135deg, #0056b3, #003f7f);
+  transform: scale(1.05);
+}

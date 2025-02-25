@@ -8,7 +8,7 @@
             <p>Your cart, your future favorites—just a step away!</p>
             
         </section>
-
+        {% if order_items %}
         <section id="cart" class="section-p1">
             <table width="100%">
                 <thead>
@@ -53,9 +53,21 @@
                         <td><strong>RS {{ total_price }}</strong> </td>
                     </tr>
                 </table>
-                <button class="normal">Proceed to checkout</button>
+                <a href="{% url 'checkout' %}"><button class="normal">Proceed to checkout</button></a>
             </div>
         </section>
+        {% else %}
+        <section id="cart" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh; background: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+            <h3 style="font-size: 24px; font-weight: 600; color: #333; margin-bottom: 15px;">Your cart is empty</h3>
+            <a href="{% url 'products' %}">
+                <button style="background: #e2df07; color: white; font-size: 16px; font-weight: 500; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.3s ease-in-out;"
+                onmouseover="this.style.background='#b6c100'"
+                onmouseout="this.style.background='#e2df07'">
+                Continue Shopping
+            </button>
+            </a>
+        </section>
+        {% endif %}
     </body>
 {% endblock %}
 </html>

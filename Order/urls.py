@@ -22,7 +22,9 @@ from . import views
 
 urlpatterns = [
     path('cart/', views.cart, name='cart'),
-    path('remove/<id>', views.removeItem, name='removeItem')
+    path('remove/<id>', views.removeItem, name='removeItem'),
+    path('checkout/', views.checkout,name='checkout'),
+    path('orderCondfirm/', views.orderConfirm,name='orderConfirm'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

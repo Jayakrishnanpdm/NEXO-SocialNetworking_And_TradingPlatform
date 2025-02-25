@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Products',
     'Order',
     'Theme',
+    'payment'
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,7 @@ CACHES = {
         "LOCATION": "unique-snowflake",
     }
 }
+
+import os
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "pk_test_51PrMOk022pYe9ecpdIJZrF02yzDqrnDOeN2P9sl332gz7E8ROWanzXMLC8bxCsdfr0Q9RYMA4HlW9DrJ7Ddb8Efd009DsHMF5m")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "sk_test_51PrMOk022pYe9ecpXH0ddfGPxXmhJfIqc1JcDUWkaO7ERV4w4dmAAw1PNaQ5vB6VRclqhCr49lnTHkXdA9lN0DVk00YP0oVX91")
