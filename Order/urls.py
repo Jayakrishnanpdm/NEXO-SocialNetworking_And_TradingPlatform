@@ -25,7 +25,8 @@ urlpatterns = [
     path('remove/<id>', views.removeItem, name='removeItem'),
     path('checkout/', views.checkout,name='checkout'),
     path('orderCondfirm/', views.orderConfirm,name='orderConfirm'),
-]
+    path('previousOrders/', views.previousOrders,name='previousOrders'),
+    path("update_order_status/<int:order_id>/", views.update_order_status, name="update_order_status"),]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

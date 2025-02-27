@@ -6,7 +6,7 @@
         <section id="page-header2">
             <h2>#Cart</h2>
             <p>Your cart, your future favorites—just a step away!</p>
-            
+            <a href="{% url 'previousOrders' %}"><button id="prev-order-btn">Previous Orders</button></a>
         </section>
         {% if order_items %}
         <section id="cart" class="section-p1">

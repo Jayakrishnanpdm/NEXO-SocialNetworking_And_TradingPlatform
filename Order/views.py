@@ -6,6 +6,14 @@ from django.contrib.auth.models import User
 from django.db.models import Sum, F
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
+from datetime import datetime
 # Create your views here.
 @login_required(login_url='/signin/')
 def cart(request): 
@@ -88,3 +96,49 @@ def orderConfirm(request):
     request.session.pop("payment_visited", None)
     context={'total_price':total_price,'payment_method':payment_method.replace("_", " ").title(),'order':order}
     return render(request,'order_confirm.html',context) 
+
+def previousOrders(request):
+    user = request.user.customer_profile
+    pending_orders = Order.objects.filter(customer=user, complete=True).exclude(status__in=[Order.CART_STAGE, Order.ORDER_DELIVERED])
+    delivered_orders = Order.objects.filter(customer=user, status=Order.ORDER_DELIVERED)
+    context={'pending_orders':pending_orders,'delivered_orders':delivered_orders}
+    return render(request,'previous_orders.html',context)
+
+
+@csrf_exempt
+def update_order_status(request, order_id):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            new_status = data.get("status", "").lower()
+
+            if new_status != "delivered":
+                return JsonResponse({"success": False, "error": "Invalid status update"}, status=400)
+
+            order = get_object_or_404(Order, id=order_id)
+            order.status = Order.ORDER_DELIVERED
+            order.delivered_date = datetime.now()
+            order.save()
+
+            items = []
+            for item in order.items.all():
+                image_url = (
+                    item.product.images.first().image.url
+                    if item.product.images.exists() else "/static/images/default.png"
+                )
+                items.append({
+                    "product_name": item.product.name,
+                    "quantity": item.quantity,
+                    "product_image": image_url
+                })
+
+            return JsonResponse({
+                "success": True,
+                "delivered_date": order.delivered_date.strftime('%Y-%m-%d'),
+                "items": items
+            })
+
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "error": "Invalid JSON data"}, status=400)
+
+    return JsonResponse({"success": False, "error": "Invalid request method"}, status=405)
