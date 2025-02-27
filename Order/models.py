@@ -14,6 +14,7 @@ class Order(models.Model):
     status = models.IntegerField(choices=status_choices,default=CART_STAGE)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
+    delivered_date = models.DateTimeField(null=True,blank=True)
     
     def __str__(self):
         return str(self.id)
