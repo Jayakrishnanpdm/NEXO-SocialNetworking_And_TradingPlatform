@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+     "daphne",
+     "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +45,9 @@ INSTALLED_APPS = [
     'Products',
     'Order',
     'Theme',
-    'payment'
+    'payment',
+    'messaging',
+ 
 ]
 
 MIDDLEWARE = [
@@ -164,3 +168,14 @@ CACHES = {
 import os
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "pk_test_51PrMOk022pYe9ecpdIJZrF02yzDqrnDOeN2P9sl332gz7E8ROWanzXMLC8bxCsdfr0Q9RYMA4HlW9DrJ7Ddb8Efd009DsHMF5m")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "sk_test_51PrMOk022pYe9ecpXH0ddfGPxXmhJfIqc1JcDUWkaO7ERV4w4dmAAw1PNaQ5vB6VRclqhCr49lnTHkXdA9lN0DVk00YP0oVX91")
+
+# Channels
+ASGI_APPLICATION = "Nexo.asgi.application"
+# Configure Redis as Channel Layer Backend
+# settings.py
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # Use Redis for production
+    },
+}
+

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .chat-container {
+            width: 400px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+        .sent {
+            background: #dcf8c6;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .received {
+            background: #fff;
+            align-self: flex-start;
+            text-align: left;
+        }
+        .input-box {
+            display: flex;
+            margin-top: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h3>Chat with {{ receiver.username }}</h3>
+        <div id="chat-box" class="chat-box">
+            {% for msg in messages %}
+                <div class="message {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
+                    <strong>{{ msg.sender.username }}:</strong> {{ msg.content }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="input-box">
+            <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="checkEnter(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let userId = "{{ request.user.id }}";
+            let conversationId = "{{ conversation_id }}";  
+            let chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${conversationId}/`);
+
+        chatSocket.onmessage = function(e) {
+            let data = JSON.parse(e.data);
+            let chatBox = document.getElementById("chat-box");
+            let newMessage = document.createElement("div");
+            newMessage.classList.add("message", data.sender_id == userId ? "sent" : "received");
+            newMessage.innerHTML = `<strong>${data.sender_id == userId ? 'You' : 'Them'}:</strong> ${data.message}`;
+            chatBox.appendChild(newMessage);
+
+            // Auto-scroll to the latest message
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        function sendMessage() {
+            let inputField = document.getElementById("messageInput");
+            let message = inputField.value.trim();
+            if (message !== "") {
+                chatSocket.send(JSON.stringify({ "message": message }));
+                inputField.value = "";
+            }
+        }
+
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        // Auto-scroll on load
+        window.onload = function() {
+            let chatBox = document.getElementById("chat-box");
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+    </script>
+</body>
+</html>
