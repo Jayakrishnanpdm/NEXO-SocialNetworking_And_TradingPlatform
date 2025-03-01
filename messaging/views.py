@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from .models import Conversation, Message
 from django.contrib.auth.models import User
 
-@login_required
+@login_required(login_url="/signup/")
 def get_or_create_conversation(request, user_id):
     """ Get or create a chat between two users """
     user2 = get_object_or_404(User, id=user_id)
@@ -15,12 +15,17 @@ def get_or_create_conversation(request, user_id):
     if not conversation:
         conversation = Conversation.objects.create()
         conversation.participants.add(request.user, user2)
+    
+    receiver = conversation.participants.exclude(id=request.user.id).first()
 
     messages = conversation.messages.all()
-    return render(request, "networking/chat.html", {
+    users=User.objects.all().exclude(id=request.user.id)
+    return render(request, "networking/sample.html", {
         "conversation": conversation, 
         "messages": messages, 
-        "conversation_id": conversation.id  # Pass conversation_id
+        "conversation_id": conversation.id,
+        "receiver": receiver ,
+        "users": users
     })
 
 @login_required
@@ -34,3 +39,8 @@ def send_message(request, conversation_id):
         return JsonResponse({"message": message.content, "sender": message.sender.username, "timestamp": message.timestamp})
 
     return JsonResponse({"error": "Message cannot be empty"}, status=400)
+
+def chatInterface(request):
+    users=User.objects.all().exclude(id=request.user.id)
+    return render(request, "networking/chatInterface.html", {"users": users})
+

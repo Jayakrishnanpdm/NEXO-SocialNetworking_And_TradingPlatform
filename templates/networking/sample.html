@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="{%static 'css/style_message.css' %}">
+</head>
+<body>
+
+        <!-- Main -->
+
+        <main>
+            <div class="container">
+                <!------------- Left ----------->
+                <div class="left">
+                    <!------Sidebar------>
+                    <div class="sidebar">
+                        <a class="menu-item active">
+                            <span><i class="uil uil-home"></i></span>
+                        </a>
+                        <a class="menu-item">
+                            <span><i class="uil uil-user"></i></span>
+                        </a>
+                        <a class="menu-item" id="notifications">
+                            <span><i class="uil uil-bell"><small class="notification-count">9+</small></i></span>
+                            <!-------notification popup-------->
+                        </a>
+                        <a class="menu-item" id="messages-notifications">   
+                            <span><i class="uil uil-envelope-edit"><small class="notification-count">9+</small></i></span>
+                        </a>
+                        <a class="menu-item">
+                            <span><i class="uil uil-bookmark"></i></span>
+                        </a>
+                        <a class="menu-item">
+                            <span><i class="uil uil-analytics"></i></span>
+                        </a>
+                        <a class="menu-item" id="theme">    
+                            <span><i class="uil uil-palette"></i></span>
+                        </a>
+                        <a class="menu-item">
+                            <span><i class="uil uil-setting"></i></span>
+                        </a>
+                    </div>
+                    <!------end of sidebar------->
+                </div>
+    
+                <!------middle---->
+                <div class="messenger-container">
+                    <!-- Upper Section -->
+                    <div class="upper-section">
+                        <div class="top-section">
+                            <h2>{{ request.user.username }}</h2>
+                            <i class="uil uil-edit"></i>
+                        </div>
+        
+                        <!-- Search Bar -->
+                        <div class="search-bar">
+                            <i class="uil uil-search"></i>
+                            <input type="text" id="message-search" placeholder="Search messages...">
+                        </div>
+        
+                        <!-- Scrollable Messages List -->
+                        <div class="message-list">
+                            {% for user in users %}
+                            <div class="message unread">
+                                <div class="profile-picture">
+                                    <img src="{{ user.profile.profile_pic.url }}" alt="">
+                                    <span class="status green"></span>
+                                </div>
+                                <div class="message-details">
+                                    <a href="{% url 'chat' user.id %}">
+                                    <h5>{{ user.username }}</h5>
+                                    <p>{{ user.username}} sent an attachment. </p>
+                                    </a>
+                                </div>
+                                <span class="unread-indicator"></span>
+                            </div>
+                            {% endfor %}
+                            <div class="message unread">
+                                <div class="profile-picture">
+                                    <img src="images/profile-1.jpg" alt="">
+                                    <span class="status green"></span>
+                                </div>
+                                <div class="message-details">
+                                    <h5>Amal</h5>
+                                    <p>AMAL sent an attachment. • 3h</p>
+                                </div>
+                                <span class="unread-indicator"></span>
+                            </div>
+    
+                        </div>
+                    </div>
+        
+                </div>
+    
+
+            <!------right---->
+
+            <div class="chat-container">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <button id="backButton" class="back-btn">←</button>
+                    <img src="" alt="">
+                    <h3 id="chatUserName">{{ receiver.username }}</h3>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    {% for msg in messages %}
+                        <div class="message {% if msg.sender == request.user %}sent-message{% else %}received-message{% endif %}">
+                            <strong>{{ msg.sender.username }}</strong>{{ msg.content }}
+                        </div>
+                    {% endfor %}
+                </div>
+        
+                <!-- Chat Input -->
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="checkEnter(event)">
+                    <button id="sendMessage" onclick="sendMessage()">➤</button>
+                </div>
+            </div>
+        
+        </div>
+
+        </main>
+    <script>
+        let userId = Number("{{ request.user.id }}");
+        let conversationId = "{{ conversation_id }}";  
+        let receiverName = "{{ receiver.username }}";
+        let chatMessages = document.getElementById("chatMessages");
+
+        // Establish WebSocket connection
+        let chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${conversationId}/`);
+
+        // Listen for incoming messages
+        chatSocket.onmessage = function(e) {
+            let data = JSON.parse(e.data);
+            let newMessage = document.createElement("div");
+            newMessage.classList.add("message", data.sender_id == userId ? "sent" : "received");
+            newMessage.innerHTML = `<strong>${Number(data.sender_id) === userId ? 'You' : receiverName}:</strong> ${data.message}`;            chatMessages.appendChild(newMessage);
+
+            // Auto-scroll to the latest message
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        // Send message
+        function sendMessage() {
+            let inputField = document.getElementById("messageInput");
+            let message = inputField.value.trim();
+            if (message !== "") {
+                chatSocket.send(JSON.stringify({ "message": message }));
+                inputField.value = "";
+            }
+        }
+
+        // Send on Enter key press
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        // Auto-scroll on page load
+        window.onload = function() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+    </script>
+
+</body>
+</html>

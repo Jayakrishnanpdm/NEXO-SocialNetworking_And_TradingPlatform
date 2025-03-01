@@ -87,6 +87,7 @@
     <script>
         let userId = "{{ request.user.id }}";
             let conversationId = "{{ conversation_id }}";  
+            let receiverName = "{{ receiver.username }}";
             let chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${conversationId}/`);
 
         chatSocket.onmessage = function(e) {
@@ -94,7 +95,7 @@
             let chatBox = document.getElementById("chat-box");
             let newMessage = document.createElement("div");
             newMessage.classList.add("message", data.sender_id == userId ? "sent" : "received");
-            newMessage.innerHTML = `<strong>${data.sender_id == userId ? 'You' : 'Them'}:</strong> ${data.message}`;
+            newMessage.innerHTML = `<strong>${data.sender_id == userId ? 'You' : receiverName}:</strong> ${data.message}`;
             chatBox.appendChild(newMessage);
 
             // Auto-scroll to the latest message

@@ -170,5 +170,5 @@ def signin(request):
 
 def logout(request):
     auth_logout(request)
-    return render(request, 'signin.html')
+    return redirect("signin")
 
