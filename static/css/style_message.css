@@ -337,12 +337,19 @@ main .container .left .profile{
 .message {
     display: flex;
     align-items: center;
-    padding: 0.7rem;
-    cursor: pointer;
+    padding: 0.8rem;
     border-radius: var(--border-radius);
+    cursor: pointer;
     transition: background 0.3s ease;
 }
+.message-time {
+    font-size: 9px;
 
+    margin-left: 5px;
+    font-style: italic;
+    white-space: nowrap;
+    opacity: 0.8; /* Optional: Slightly faded */
+}
 .message:hover {
     background: var(--color-black);
 }
@@ -527,7 +534,6 @@ main .container .left .profile{
     border-radius: var(--border-radius);
     cursor: pointer;
 }
-
 
 
 /*-----------theme customizer------------*/

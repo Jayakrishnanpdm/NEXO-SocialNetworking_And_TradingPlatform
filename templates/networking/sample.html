@@ -67,7 +67,7 @@
                             {% for user in users %}
                             <div class="message unread">
                                 <div class="profile-picture">
-                                    <img src="{{ user.profile.profile_pic.url }}" alt="">
+                                    <img src="{%static 'img/chat/images/user.jpeg' %}" alt="">
                                     <span class="status green"></span>
                                 </div>
                                 <div class="message-details">
@@ -103,7 +103,7 @@
                 <!-- Chat Header -->
                 <div class="chat-header">
                     <button id="backButton" class="back-btn">←</button>
-                    <img src="" alt="">
+                    <img src="{% static 'img/chat/images/user.jpeg' %}" alt="User">
                     <h3 id="chatUserName">{{ receiver.username }}</h3>
                 </div>
                 
@@ -111,62 +111,86 @@
                 <div class="chat-messages" id="chatMessages">
                     {% for msg in messages %}
                         <div class="message {% if msg.sender == request.user %}sent-message{% else %}received-message{% endif %}">
-                            <strong>{{ msg.sender.username }}</strong>{{ msg.content }}
+                            <span class="message-text">{{ msg.content }}</span>
+                            <span class="message-time">{{ msg.timestamp|date:"D h:i A" }}</span>
                         </div>
                     {% endfor %}
                 </div>
-        
+                
                 <!-- Chat Input -->
                 <div class="chat-input">
                     <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="checkEnter(event)">
                     <button id="sendMessage" onclick="sendMessage()">➤</button>
                 </div>
             </div>
-        
-        </div>
-
         </main>
+
     <script>
-        let userId = Number("{{ request.user.id }}");
-        let conversationId = "{{ conversation_id }}";  
-        let receiverName = "{{ receiver.username }}";
-        let chatMessages = document.getElementById("chatMessages");
+let userId = Number("{{ request.user.id }}");
+let conversationId = "{{ conversation_id }}";
+let chatMessages = document.getElementById("chatMessages");
 
-        // Establish WebSocket connection
-        let chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${conversationId}/`);
+// Establish WebSocket connection
+let chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${conversationId}/`);
 
-        // Listen for incoming messages
-        chatSocket.onmessage = function(e) {
-            let data = JSON.parse(e.data);
-            let newMessage = document.createElement("div");
-            newMessage.classList.add("message", data.sender_id == userId ? "sent" : "received");
-            newMessage.innerHTML = `<strong>${Number(data.sender_id) === userId ? 'You' : receiverName}:</strong> ${data.message}`;            chatMessages.appendChild(newMessage);
+chatSocket.onmessage = function (e) {
+    let data = JSON.parse(e.data);
 
-            // Auto-scroll to the latest message
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
+    // Create new message div
+    let newMessage = document.createElement("div");
+    newMessage.classList.add("message", data.sender_id == userId ? "sent-message" : "received-message");
 
-        // Send message
-        function sendMessage() {
-            let inputField = document.getElementById("messageInput");
-            let message = inputField.value.trim();
-            if (message !== "") {
-                chatSocket.send(JSON.stringify({ "message": message }));
-                inputField.value = "";
-            }
-        }
+    // Format timestamp properly
+    let timestamp = data.timestamp ? formatTimestamp(data.timestamp) : "";
 
-        // Send on Enter key press
-        function checkEnter(event) {
-            if (event.key === "Enter") {
-                sendMessage();
-            }
-        }
+    // Structure message correctly (NO sender name)
+    newMessage.innerHTML = `
+        <span class="message-text">${data.message}</span>
+        <span class="message-time">${timestamp}</span>
+    `;
 
-        // Auto-scroll on page load
-        window.onload = function() {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
+    chatMessages.appendChild(newMessage);
+
+    // Auto-scroll to the latest message
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+// Send message function
+function sendMessage() {
+    let inputField = document.getElementById("messageInput");
+    let message = inputField.value.trim();
+    if (message !== "") {
+        chatSocket.send(JSON.stringify({
+            "message": message,
+            "sender_id": userId
+        }));
+        inputField.value = "";
+    }
+}
+
+// Send message on Enter key press
+document.getElementById("messageInput").addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
+
+// Auto-scroll on page load
+window.onload = function () {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+// Format timestamp to 12-hour format
+function formatTimestamp(timestamp) {
+    let date = new Date(timestamp);
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    return `${hours}:${minutes} ${ampm}`;
+}
+
     </script>
 
 </body>

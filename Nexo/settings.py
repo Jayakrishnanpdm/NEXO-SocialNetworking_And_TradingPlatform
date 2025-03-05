@@ -179,3 +179,6 @@ CHANNEL_LAYERS = {
     },
 }
 
+TIME_ZONE = 'Asia/Kolkata'  # India Standard Time (UTC+5:30)
+USE_TZ = True  # Keep this True for timezone-aware datetime
+
