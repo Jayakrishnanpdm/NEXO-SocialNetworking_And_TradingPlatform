@@ -278,19 +278,6 @@ main .container .left .profile{
     display: flex;
     flex-direction: column;
 }
-.chat-placeholder {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--color-gray);
-    background: var(--color-white);
-    border-radius: var(--card-border-radius);
-    padding: 2rem;
-    height: 80vh; /* Ensure it fills the space */
-}
 .messenger-container, 
 .chat-placeholder {
     display: flex;
@@ -337,19 +324,12 @@ main .container .left .profile{
 .message {
     display: flex;
     align-items: center;
-    padding: 0.8rem;
-    border-radius: var(--border-radius);
+    padding: 0.7rem;
     cursor: pointer;
+    border-radius: var(--border-radius);
     transition: background 0.3s ease;
 }
-.message-time {
-    font-size: 9px;
 
-    margin-left: 5px;
-    font-style: italic;
-    white-space: nowrap;
-    opacity: 0.8; /* Optional: Slightly faded */
-}
 .message:hover {
     background: var(--color-black);
 }
@@ -409,14 +389,11 @@ main .container .left .profile{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: var(--color-white);
+    background: var(--color-light);
     border-radius: var(--border-radius);
     padding: 1rem;
-    top: 0;
-    left: 0;
-    height: 80vh;
+    height: 75vh; /* Adjust height */
 }
-
 
 /* Chat header (Profile pic & Name) */
 .chat-header {
@@ -441,7 +418,7 @@ main .container .left .profile{
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-height: 75vh; /* Ensure it doesn't exceed height */
+    max-height: 50vh; /* Ensure it doesn't exceed height */
 }
 /* Scrollbar styling for Webkit browsers (Chrome, Edge, Safari) */
 .chat-messages::-webkit-scrollbar {
@@ -458,8 +435,6 @@ main .container .left .profile{
 }
 /* Sent message (Align right) */
 .sent-message {
-    display: flex;
-    flex-direction: column;
     align-self: flex-end;
     background: var(--color-primary);
     color: white;
@@ -481,8 +456,6 @@ main .container .left .profile{
 
 /* Received message (Align left) */
 .received-message {
-    display: flex;
-    flex-direction: column;
     align-self: flex-start;
     background: var(--color-light);
     color: var(--color-dark);
@@ -495,6 +468,7 @@ main .container .left .profile{
 
 /* Received message - Sender Name */
 .received-message::before {
+    content: attr(data-sender);
     display: block;
     font-size: 0.8rem;
     font-weight: bold;
@@ -533,6 +507,7 @@ main .container .left .profile{
     border-radius: var(--border-radius);
     cursor: pointer;
 }
+
 
 
 /*-----------theme customizer------------*/
@@ -692,13 +667,13 @@ main .container .left .profile{
 }
 
 #backButton {
-    display: none; 
-    color: gray; 
+    display: none;  
     background: none;
     border: none;
     font-size: 20px;
     cursor: pointer;
 }
+
 
 
 @media screen and (max-width: 992px) {
@@ -711,7 +686,7 @@ main .container .left .profile{
         display: none;
     }
     
-    .chat-container {
+    #chatBox {
         width: 100%;
         height: 100vh;
         position: fixed;
@@ -798,6 +773,7 @@ main .container .left .profile{
     }
     
 }
+
 
 
 /* Group Chat Form (Styled Like Chat Box) */

@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 
 class Conversation(models.Model):
     participants = models.ManyToManyField(User, related_name="conversations")
+    is_groupchat = models.BooleanField(default=False)
+    groupname = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
