@@ -1,88 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
-    <link rel="stylesheet" href="{%static 'css/style_message.css' %}">
-</head>
+{% include 'networking/baselayout_chat.html' %}
+{% load static %}
+{% load chat_filters %}
+{% load tz %}
 <body>
-    <!-- Main -->
+        <!-- Main -->
 
-    <main>
-        <div class="container">
-            <!------------- Left ----------->
-            <div class="left">
-                <!------Sidebar------>
-                <div class="sidebar">
-                    <a class="menu-item active">
-                        <span><i class="uil uil-home"></i></span>
-                    </a>
-                    <a class="menu-item">
-                        <span><i class="uil uil-user"></i></span>
-                    </a>
-                    <a class="menu-item" id="notifications">
-                        <span><i class="uil uil-bell"><small class="notification-count">9+</small></i></span>
-                        <!-------notification popup-------->
-                    </a>
-                    <a class="menu-item" id="messages-notifications">   
-                        <span><i class="uil uil-envelope-edit"><small class="notification-count">9+</small></i></span>
-                    </a>
-                    <a class="menu-item">
-                        <span><i class="uil uil-bookmark"></i></span>
-                    </a>
-                    <a class="menu-item">
-                        <span><i class="uil uil-analytics"></i></span>
-                    </a>
-                    <a class="menu-item" id="theme">    
-                        <span><i class="uil uil-palette"></i></span>
-                    </a>
-                    <a class="menu-item">
-                        <span><i class="uil uil-setting"></i></span>
-                    </a>
-                </div>
-                <!------end of sidebar------->
-            </div>
-
-            <!------middle---->
-            <div class="messenger-container">
-                <!-- Upper Section -->
-                <div class="upper-section">
-                    <div class="top-section">
-                        <h2>{{ request.user.username }}</h2>
-                        <i class="uil uil-users-alt" id="editIcon"></i>
-                    </div>
-    
-                    <!-- Search Bar -->
-                    <div class="search-bar">
-                        <i class="uil uil-search"></i>
-                        <input type="text" id="message-search" placeholder="Search messages...">
-                    </div>
-    
-                    <!-- Scrollable Messages List -->
-                    <div class="message-list">
-                        {% for user in users %}
-                        <div class="message unread">
-                            <div class="profile-picture">
-                                <img src="{%static 'img/chat/images/user.jpeg' %}" alt="">
-                                <span class="status green"></span>
-                            </div>
-                            <div class="message-details">
-                                <a href="{% url 'chat' user.id %}">
-                                <h5>{{ user.username }}</h5>
-                                <p>{{ user.username}} sent an attachment. </p>
-                                </a>
-                            </div>
-                            <span class="unread-indicator"></span>
-                        </div>
-                        {% endfor %}
-
-                    </div>
-                </div>
-    
-            </div>
+        <main>
+            <div class="container">
+                <!------------- Left ----------->
+            {% include 'networking/chatLeftBar.html' %}
 
             <!------right---->
 
@@ -97,34 +23,59 @@
             </div>
 
             <!-- Group Chat Creation Form -->
-    <div id="groupForm" class="chat-box group-form">
+    <form id="groupForm" class="chat-box group-form" method="post" enctype="multipart/form-data" action="{% url 'groupChat' %}">
+    {% csrf_token %}
     <h3>Create Group Chat</h3>
 
     <!-- Profile Picture Upload -->
     <label for="groupProfilePic" class="profile-upload">
-        <img id="groupPicPreview"  src="images/user.png" alt="">
-        <input type="file" id="groupProfilePic" accept="image/*" hidden>
+        <img id="groupPicPreview"  src="{%static 'img/chat/images/user.jpeg' %}" alt="">
+        <input type="file" id="groupProfilePic" accept="image/*" hidden name="group_pic">
+        <i class="uil uil-camera"></i>
         <p>Upload Group Photo</p>
     </label>
 
     <!-- Group Name Input -->
-    <input type="text" id="groupName" placeholder="Group Name">
+    <input type="text" id="groupName" placeholder="Group Name" name="group_name" required>
 
     <!-- Add Members Input -->
-    <input type="text" id="groupMembers" placeholder="Add Members (comma-separated)">
+    <input type="text" id="groupMembers" placeholder="Add Members (comma-separated)" name="group_members" required>
 
     <!-- Timespan Input -->
-    <input type="number" id="groupTimespan" placeholder="Timespan (hours)">
-
-    <!-- Create & Cancel Buttons -->
-    <button id="createGroupBtn">Create Group</button>
-    <button id="closeGroupForm">Cancel</button>
-
+    <div class="time-span">
+        <label for="timespanType"><strong>Select Timespan Type:</strong></label>
+        <select id="timespanType">
+          <option value="none">None</option>
+          <option value="months">Months</option>
+          <option value="days">Days</option>
+          <option value="hours">Hours</option>
+        </select>
+        <input type="number" id="timespanInput" placeholder="Enter value" min="1" name="timespan" default="none"
+           style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
     </div>
 
-        </div>
+    <!-- Create & Cancel Buttons -->
+    <button id="createGroupBtn" type="submit">Create Group</button>
+    <button id="closeGroupForm">Cancel</button>
+
+    </form>
+
+    </div>
     </main>
     {% include 'networking/theme.html' %}
+    <script>
+        document.getElementById("timespanType").addEventListener("change", function () {
+            const inputBox = document.getElementById("timespanInput");
+            if (this.value === "none") {
+                inputBox.style.display = "none"; // Hide input when "None" is selected
+            } else {
+                inputBox.style.display = "block"; // Show input for Months, Days, or Hours
+                inputBox.placeholder = `Enter ${this.value}`;
+        
+            }
+        });
+        
+    </script>
     <script src="{% static 'js/script_groupchat.js' %}"></script>
 </body>
 </html>

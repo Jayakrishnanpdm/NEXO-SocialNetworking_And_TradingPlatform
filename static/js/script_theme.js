@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    
     // Add event listeners
     themeBtn.addEventListener('click', openThemeModal);
     themeModal.addEventListener('click', closeThemeModal);
@@ -40,27 +39,21 @@ document.addEventListener('DOMContentLoaded', function () {
             let fontSize;
             if (size.classList.contains('font-size-1')) {
                 fontSize = '10px';
-                root.style.setProperty('--sticky-top-left', '5.4rem');
-                root.style.setProperty('--sticky-top-right', '5.4rem');
             } else if (size.classList.contains('font-size-2')) {
                 fontSize = '13px';
-                root.style.setProperty('--sticky-top-left', '5.4rem');
-                root.style.setProperty('--sticky-top-right', '-7rem');
             } else if (size.classList.contains('font-size-3')) {
                 fontSize = '15px';
-                root.style.setProperty('--sticky-top-left', '-2rem');
-                root.style.setProperty('--sticky-top-right', '-17rem');
             } else if (size.classList.contains('font-size-4')) {
                 fontSize = '17px';
-                root.style.setProperty('--sticky-top-left', '-5rem');
-                root.style.setProperty('--sticky-top-right', '-25rem');
             } else if (size.classList.contains('font-size-5')) {
                 fontSize = '18px';
-                root.style.setProperty('--sticky-top-left', '-10rem');
-                root.style.setProperty('--sticky-top-right', '-33rem');
             }
 
             document.querySelector('html').style.fontSize = fontSize;
+
+            // Save to localStorage
+            localStorage.setItem('fontSize', fontSize);
+            localStorage.setItem('activeFontSize', size.classList[0]);
         });
     });
 
@@ -84,6 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             root.style.setProperty('--color-primary', primaryColor);
+
+            // Save to localStorage
+            localStorage.setItem('primaryColor', primaryColor);
+            localStorage.setItem('activeColor', color.classList[0]);
         });
     });
 
@@ -107,6 +104,9 @@ document.addEventListener('DOMContentLoaded', function () {
         Bg1.classList.remove('active');
         Bg3.classList.remove('active');
         changeBg();
+
+        // Save to localStorage
+        localStorage.setItem('background', 'bg-2');
     });
 
     Bg3.addEventListener('click', () => {
@@ -118,13 +118,68 @@ document.addEventListener('DOMContentLoaded', function () {
         Bg1.classList.remove('active');
         Bg3.classList.add('active');
         changeBg();
+
+        // Save to localStorage
+        localStorage.setItem('background', 'bg-3');
     });
 
     Bg1.addEventListener('click', () => {
-        Bg2.classList.remove('active');
+        darkColorLightness = '17%';
+        lightColorLightness = '95%';
+        whiteColorLightness = '100%';
+    
         Bg1.classList.add('active');
+        Bg2.classList.remove('active');
         Bg3.classList.remove('active');
-        window.location.reload(); // Reloads the page to reset to default light mode
+        changeBg();
+    
+        // Save to localStorage
+        localStorage.setItem('background', 'bg-1');
     });
-});
+    
 
+    // ========== LOAD USER SETTINGS FROM LOCAL STORAGE ==========
+    function loadSettings() {
+        // Load font size
+        if (localStorage.getItem('fontSize')) {
+            document.querySelector('html').style.fontSize = localStorage.getItem('fontSize');
+        }
+
+        if (localStorage.getItem('activeFontSize')) {
+            document.querySelectorAll('.choose-size span').forEach(size => {
+                size.classList.remove('active');
+                if (size.classList.contains(localStorage.getItem('activeFontSize'))) {
+                    size.classList.add('active');
+                }
+            });
+        }
+
+        // Load primary color
+        if (localStorage.getItem('primaryColor')) {
+            root.style.setProperty('--color-primary', localStorage.getItem('primaryColor'));
+        }
+
+        if (localStorage.getItem('activeColor')) {
+            document.querySelectorAll('.choose-color span').forEach(color => {
+                color.classList.remove('active');
+                if (color.classList.contains(localStorage.getItem('activeColor'))) {
+                    color.classList.add('active');
+                }
+            });
+        }
+
+        // Load background
+        const savedBg = localStorage.getItem('background');
+        if (savedBg) {
+            if (savedBg === 'bg-2') {
+                Bg2.click();
+            } else if (savedBg === 'bg-3') {
+                Bg3.click();
+            } else {
+                Bg1.click();
+            }
+        }
+    }
+
+    loadSettings(); // Load user preferences on page load
+});

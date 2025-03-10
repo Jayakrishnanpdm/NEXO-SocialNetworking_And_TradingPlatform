@@ -17,76 +17,7 @@
         <main>
             <div class="container">
                 <!------------- Left ----------->
-                <div class="left">
-                    <!------Sidebar------>
-                    <div class="sidebar">
-                        <a class="menu-item active">
-                            <span><i class="uil uil-home"></i></span>
-                        </a>
-                        <a class="menu-item">
-                            <span><i class="uil uil-user"></i></span>
-                        </a>
-                        <a class="menu-item" id="notifications">
-                            <span><i class="uil uil-bell"><small class="notification-count">9+</small></i></span>
-                            <!-------notification popup-------->
-                        </a>
-                        <a class="menu-item" id="messages-notifications">   
-                            <span><i class="uil uil-envelope-edit"><small class="notification-count">9+</small></i></span>
-                        </a>
-                        <a class="menu-item">
-                            <span><i class="uil uil-bookmark"></i></span>
-                        </a>
-                        <a class="menu-item">
-                            <span><i class="uil uil-analytics"></i></span>
-                        </a>
-                        <a class="menu-item" id="theme">    
-                            <span><i class="uil uil-palette"></i></span>
-                        </a>
-                        <a class="menu-item">
-                            <span><i class="uil uil-setting"></i></span>
-                        </a>
-                    </div>
-                    <!------end of sidebar------->
-                </div>
-    
-                <!------middle---->
-                <div class="messenger-container">
-                    <!-- Upper Section -->
-                    <div class="upper-section">
-                        <div class="top-section">
-                            <h2>{{ request.user.username }}</h2>
-                            <i class="uil uil-users-alt" id="editIcon"></i>
-                        </div>
-        
-                        <!-- Search Bar -->
-                        <div class="search-bar">
-                            <i class="uil uil-search"></i>
-                            <input type="text" id="message-search" placeholder="Search messages...">
-                        </div>
-        
-                        <!-- Scrollable Messages List -->
-                        <div class="message-list">
-                            {% for user in users %}
-                            <div class="message unread">
-                                <div class="profile-picture">
-                                    <img src="{%static 'img/chat/images/user.jpeg' %}" alt="">
-                                    <span class="status green"></span>
-                                </div>
-                                <div class="message-details">
-                                    <a href="{% url 'chat' user.id %}">
-                                    <h5>{{ user.username }}</h5>
-                                    <p>{{ user.username}} sent an attachment. </p>
-                                    </a>
-                                </div>
-                                <span class="unread-indicator"></span>
-                            </div>
-                            {% endfor %}
-    
-                        </div>
-                    </div>
-        
-                </div>
-    
+            {% include 'networking/chatLeftBar.html' %}
 
             <!------right---->
 
@@ -98,7 +29,6 @@
                 </div>
                 
                 <!-- Chat Messages -->
-                {% load tz %}
 
                 <div class="chat-messages" id="chatMessages">
                     {% for msg in messages %}
@@ -150,7 +80,18 @@
                     <input type="text" id="groupMembers" placeholder="Add Members (comma-separated)">
                 
                     <!-- Timespan Input -->
-                    <input type="number" id="groupTimespan" placeholder="Timespan (hours)">
+                    <div class="time-span">
+                        <label for="timespanType"><strong>Select Timespan Type:</strong></label>
+                        <select id="timespanType">
+                          <option value="none">None</option>
+                          <option value="months">Months</option>
+                          <option value="days">Days</option>
+                          <option value="hours">Hours</option>
+                        </select>
+                        <input type="number" id="timespanInput" placeholder="Enter value" min="1" name="timespan" default="none"
+                           style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                    </div>
+                
                 
                     <!-- Create & Cancel Buttons -->
                     <button id="createGroupBtn">Create Group</button>
@@ -161,6 +102,18 @@
             </div>
         </main>
     {% include 'networking/theme.html' %}
+        <script>        
+            document.getElementById("timespanType").addEventListener("change", function () {
+            const inputBox = document.getElementById("timespanInput");
+            if (this.value === "none") {
+                inputBox.style.display = "none"; // Hide input when "None" is selected
+            } else {
+                inputBox.style.display = "block"; // Show input for Months, Days, or Hours
+                inputBox.placeholder = `Enter ${this.value}`;
+        
+            }
+        });
+        </script>
         <script>
         let userId = Number("{{ request.user.id }}");
         let conversationId = "{{ conversation_id }}";
@@ -235,6 +188,5 @@
         }
         
     </script>
-    <script src="{% static 'js/sample.js' %}"></script>
 </body>
 </html>

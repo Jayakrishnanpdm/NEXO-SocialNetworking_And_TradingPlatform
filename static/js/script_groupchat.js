@@ -130,41 +130,5 @@ document.addEventListener("DOMContentLoaded", function () {
             chatPlaceholder.style.display = "none";
         });
     }
-
-    // 📌 Send Message Function
-    function sendMessageToChat() {
-        if (!messageInput || !sendMessage) return;
-
-        if (messageInput.value.trim() === "") return;
-
-        const chatMessages = document.getElementById("chatMessages");
-        if (!chatMessages) {
-            console.warn("Chat messages container not found!");
-            return;
-        }
-
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("sent-message");
-
-        messageDiv.innerHTML = `
-            <span class="sender-name">You</span>
-            <p>${messageInput.value}</p>
-        `;
-
-        chatMessages.appendChild(messageDiv);
-        messageInput.value = "";
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    if (sendMessage) {
-        sendMessage.addEventListener("click", sendMessageToChat);
-    }
-
-    if (messageInput) {
-        messageInput.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                sendMessageToChat();
-            }
-        });
-    }
 });
+
