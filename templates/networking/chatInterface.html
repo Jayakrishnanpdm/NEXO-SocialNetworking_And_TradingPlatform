@@ -2,18 +2,12 @@
 {% load static %}
 {% load chat_filters %}
 {% load tz %}
-<body>
-        <!-- Main -->
 
-        <main>
-            <div class="container">
-                <!------------- Left ----------->
+<body>
+    <main>
+        <div class="container">
             {% include 'networking/chatLeftBar.html' %}
 
-            <!------right---->
-
-            
-            <!-- Placeholder when no chat is selected -->
             <div class="chat-placeholder" id="chatPlaceholder">
                 <div class="messenger-icon">
                     <i class="uil uil-comment-alt"></i>
@@ -22,60 +16,48 @@
                 <p>Send a message to start a chat.</p>
             </div>
 
-            <!-- Group Chat Creation Form -->
-    <form id="groupForm" class="chat-box group-form" method="post" enctype="multipart/form-data" action="{% url 'groupChat' %}">
-    {% csrf_token %}
-    <h3>Create Group Chat</h3>
+            <form id="groupForm" class="chat-box group-form" method="post" enctype="multipart/form-data" action="{% url 'groupChat' %}">
+                {% csrf_token %}
+                <h3>Create Group Chat</h3>
 
-    <!-- Profile Picture Upload -->
-    <label for="groupProfilePic" class="profile-upload">
-        <img id="groupPicPreview"  src="{%static 'img/chat/images/user.jpeg' %}" alt="">
-        <input type="file" id="groupProfilePic" accept="image/*" hidden name="group_pic">
-        <i class="uil uil-camera"></i>
-        <p>Upload Group Photo</p>
-    </label>
+                <label for="groupProfilePic" class="profile-upload">
+                    <img id="groupPicPreview"  src="{%static 'img/chat/images/user.jpeg' %}" alt="">
+                    <input type="file" id="groupProfilePic" accept="image/*" hidden name="group_pic">
+                    <i class="uil uil-camera"></i>
+                    <p>Upload Group Photo</p>
+                </label>
+                <input type="text" id="groupName" placeholder="Group Name" name="group_name" required>
 
-    <!-- Group Name Input -->
-    <input type="text" id="groupName" placeholder="Group Name" name="group_name" required>
+                <div class="dropdown-container">
+                    <div class="selected-members" id="selectedMembers"></div>
+                    <input type="text" id="groupMembers" class="dropdown-input" placeholder="Add Members (type to search)">
+                    <ul class="dropdown-list" id="dropdownList">
+                        {% for user in users %}
+                        <li onclick="selectPerson(this)">{{ user.username }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <input type="hidden" name="group_members" id="hiddenGroupMembers">
 
-    <!-- Add Members Input -->
-    <input type="text" id="groupMembers" placeholder="Add Members (comma-separated)" name="group_members" required>
+                <div class="time-span">
+                    <label for="timespanType"><strong>Select Timespan Type:</strong></label>
+                    <select id="timespanType" style="border-radius: 10px;">
+                        <option value="none">None</option>
+                        <option value="months">Months</option>
+                        <option value="days">Days</option>
+                        <option value="hours">Hours</option>
+                    </select>
+                    <input type="number" id="timespanInput" placeholder="Enter value" min="1" name="timespan" style="display: none;">
+                </div>
 
-    <!-- Timespan Input -->
-    <div class="time-span">
-        <label for="timespanType"><strong>Select Timespan Type:</strong></label>
-        <select id="timespanType">
-          <option value="none">None</option>
-          <option value="months">Months</option>
-          <option value="days">Days</option>
-          <option value="hours">Hours</option>
-        </select>
-        <input type="number" id="timespanInput" placeholder="Enter value" min="1" name="timespan" default="none"
-           style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
-    </div>
-
-    <!-- Create & Cancel Buttons -->
-    <button id="createGroupBtn" type="submit">Create Group</button>
-    <button id="closeGroupForm">Cancel</button>
-
-    </form>
-
-    </div>
+                <button id="createGroupBtn" type="submit">Create Group</button>
+                <button id="closeGroupForm">Cancel</button>
+            </form>
+        </div>
     </main>
     {% include 'networking/theme.html' %}
-    <script>
-        document.getElementById("timespanType").addEventListener("change", function () {
-            const inputBox = document.getElementById("timespanInput");
-            if (this.value === "none") {
-                inputBox.style.display = "none"; // Hide input when "None" is selected
-            } else {
-                inputBox.style.display = "block"; // Show input for Months, Days, or Hours
-                inputBox.placeholder = `Enter ${this.value}`;
-        
-            }
-        });
-        
-    </script>
-    <script src="{% static 'js/script_groupchat.js' %}"></script>
+
+     <script src="{% static 'js/groupchat.js' %}"></script>
+
 </body>
 </html>

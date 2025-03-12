@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let fontSize;
             if (size.classList.contains('font-size-1')) {
-                fontSize = '10px';
+                fontSize = '12px';
             } else if (size.classList.contains('font-size-2')) {
                 fontSize = '13px';
             } else if (size.classList.contains('font-size-3')) {
