@@ -1,117 +1,92 @@
-document.getElementById("timespanType").addEventListener("change", function () {
-    const inputBox = document.getElementById("timespanInput");
-    inputBox.style.display = this.value === "none" ? "none" : "block";
-    inputBox.placeholder = `Enter ${this.value}`;
-});
-const inputField = document.getElementById("groupMembers");
-const dropdownList = document.getElementById("dropdownList");
-const selectedMembersContainer = document.getElementById("selectedMembers");
-const hiddenGroupMembers = document.getElementById("hiddenGroupMembers");
+document.addEventListener("DOMContentLoaded", function () {
+    let userId = Number(document.getElementById("userId").dataset.userid);
+    const groupId = document.getElementById("groupId").dataset.groupid;
+    let chatMessages = document.getElementById("chatMessages");
 
-const editIcon = document.getElementById("editIcon");
-const groupForm = document.getElementById("groupForm");
-const chatPlaceholder = document.getElementById("chatPlaceholder") || document.getElementById("chatContainer");
-const closeGroupForm = document.getElementById("closeGroupForm");
-const groupProfilePicInput = document.getElementById("groupProfilePic");
-const groupPicPreview = document.getElementById("groupPicPreview");
-const createGroupBtn = document.getElementById("createGroupBtn");
+    // Establish WebSocket connection
+    const chatSocket = new WebSocket(`ws://${window.location.host}/ws/groupchat/${groupId}/`);
 
-let selectedMembers = [];
+    chatSocket.onmessage = function (e) {
+        let data = JSON.parse(e.data);
+        let senderName = data.sender_name || "Unknown";
 
-function selectPerson(element) {
-    const name = element.textContent.trim();
+        // Create new message div
+        let newMessage = document.createElement("div");
+        newMessage.classList.add("message", data.sender_id == userId ? "sent-message" : "received-message");
 
-    if (!selectedMembers.includes(name)) {
-        selectedMembers.push(name);
-        updateSelectedMembers();
+        // Format timestamp to local time
+        let timestamp = data.timestamp ? formatTimestamp(data.timestamp) : "";
+
+        newMessage.innerHTML = `
+            <span class="sender-name">${senderName}</span>
+            <span class="message-text">${data.message}</span>
+            <span class="message-time">${timestamp}</span>
+        `;
+
+        chatMessages.appendChild(newMessage);
+
+        // Auto-scroll to the latest message
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+
+    // Send message function
+    function sendMessage() {
+        let inputField = document.getElementById("messageInput");
+        let message = inputField.value.trim();
+        if (message !== "") {
+            chatSocket.send(JSON.stringify({
+                "message": message,
+                "sender_id": userId
+            }));
+            inputField.value = "";
+        }
     }
 
-    inputField.value = "";
-    dropdownList.style.display = "none";
-}
-
-function updateSelectedMembers() {
-    selectedMembersContainer.innerHTML = "";
-
-    if (selectedMembers.length > 0) {
-        selectedMembersContainer.style.display = "flex"; // Show box
-    } else {
-        selectedMembersContainer.style.display = "none"; // Hide when empty
-    }
-
-    
-    selectedMembers.forEach(name => {
-        const memberTag = document.createElement("div");
-        memberTag.classList.add("member-tag");
-        memberTag.innerHTML = `${name} <span class="remove-btn" onclick="removeMember('${name}')">×</span>`;
-        
-        selectedMembersContainer.appendChild(memberTag);
-    });
-
-    // Update hidden input value
-    hiddenGroupMembers.value = selectedMembers.join(",");
-
-    // Auto-scroll to right
-    selectedMembersContainer.scrollLeft = selectedMembersContainer.scrollWidth;
-}
-
-function removeMember(name) {
-    selectedMembers = selectedMembers.filter(member => member !== name);
-    updateSelectedMembers();
-}
-
-inputField.addEventListener("input", () => {
-    const searchTerm = inputField.value.toLowerCase();
-    let found = false;
-
-    document.querySelectorAll(".dropdown-list li").forEach(item => {
-        if (item.textContent.toLowerCase().includes(searchTerm)) {
-            item.style.display = "block";
-            found = true;
-        } else {
-            item.style.display = "none";
+    // Send message on Enter key press
+    document.getElementById("messageInput").addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            sendMessage();
         }
     });
 
-    dropdownList.style.display = found ? "block" : "none";
-});
+    // Auto-scroll on page load
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
-document.addEventListener("click", (event) => {
-    if (!event.target.closest(".dropdown-container")) {
-        dropdownList.style.display = "none";
-    }
-});
+    // Convert timestamp properly to 12-hour format in local time
+    function formatTimestamp(timestamp) {
+        let date = new Date(timestamp);
+        let now = new Date();
 
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12 || 12; // Convert 0 to 12
+        minutes = minutes < 10 ? "0" + minutes : minutes;
 
-    // 📌 Toggle Group Form (Works for both templates)
-    if (editIcon && groupForm && chatPlaceholder) {
-        editIcon.addEventListener("click", function () {
-            if (groupForm.style.display === "block") {
-                groupForm.style.display = "none"; // Hide group form
-                chatPlaceholder.style.display = "flex"; // Show placeholder/chat-container
-            } else {
-                groupForm.style.display = "block"; // Show group form
-                chatPlaceholder.style.display = "none"; // Hide placeholder/chat-container
-            }
-        });
+        // Check if the message is from yesterday or earlier
+        let isPreviousDay = date.toDateString() !== now.toDateString();
 
-        closeGroupForm.addEventListener("click", function () {
-            groupForm.style.display = "none";
-            chatPlaceholder.style.display = "flex"; // Restore chatPlaceholder/chatContainer visibility
-        });
+        return isPreviousDay
+            ? `${date.toDateString()} ${hours}:${minutes} ${ampm}` // Show date + time for older messages
+            : `${hours}:${minutes} ${ampm}`; // Show only time for today's messages
     }
 
-    // 📌 Handle Group Profile Picture Upload & Preview
-groupProfilePicInput.addEventListener("change", function (event) {
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            groupPicPreview.src = e.target.result;
-            groupImageURL = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
+      // Group Info Box Functionality
+      const groupBox = document.getElementById("groupBox");
+      const showGroupBox = document.getElementById("showGroupBox");
+  
+      if (groupBox && showGroupBox) {
+          // Show group box when clicking "Tap here for group info"
+          showGroupBox.addEventListener("click", function (event) {
+              groupBox.style.display = "block";
+              event.stopPropagation(); // Prevent immediate closing
+          });
+  
+          // Hide group box when clicking outside
+          document.addEventListener("click", function (event) {
+              if (!groupBox.contains(event.target) && event.target !== showGroupBox) {
+                  groupBox.style.display = "none";
+              }
+          });
+      }
+  });

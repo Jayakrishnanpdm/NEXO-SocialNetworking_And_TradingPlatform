@@ -157,7 +157,7 @@ def signin(request):
             if user.is_active:
                 # Log the user in
                 login(request, user)
-                return redirect("home")  
+                return redirect("main")  
             else:
                 messages.error(request, "Your account is not active. Please verify your email.")
                 return render(request, "signin.html")

@@ -24,16 +24,15 @@ def get_or_create_conversation(request, user_id):
     users=User.objects.all().exclude(id=request.user.id)
     group_chats = Conversation.objects.filter(is_groupchat=True, participants=request.user).order_by("-id")
     now = timezone.now() 
-    return render(request, "networking/chat.html", {
-        "conversation": conversation, 
-        "messages": messages, 
-        "conversation_id": conversation.id,
-        "receiver": receiver ,
-        "users": users,
-        "group_chats": group_chats,
-        "now": now
-
-    })
+    context={
+        'conversation':conversation,
+        'messages':messages,
+        'users':users,
+        'group_chats':group_chats,
+        'receiver':receiver,
+        'now':now
+    }
+    return render(request, "networking/privateChat.html", context)
 
 @login_required
 def send_message(request, conversation_id):
@@ -148,5 +147,14 @@ def send_group_message(request, conversation_id):
 
     return JsonResponse({"error": "Message cannot be empty"}, status=400)
 
+@login_required(login_url="/signup/")
 def profile(request):
-    return render(request, "networking/profile.html")
+    user=request.user
+    username=user.username
+    return render(request, "networking/profile.html",{"username":username})
+
+@login_required(login_url="/signup/")
+def home(request):
+    user=request.user
+    username=user.username
+    return render(request, "networking/home.html",{"username":username})

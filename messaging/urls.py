@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_or_create_conversation, send_message, chatInterface, group_chat, new_groupChat,profile
+from .views import get_or_create_conversation, send_message, chatInterface, group_chat, new_groupChat,profile,home
 
 urlpatterns = [
     path("chat/<int:user_id>/", get_or_create_conversation, name="chat"),  # Finding or creating a conversation
@@ -8,4 +8,5 @@ urlpatterns = [
     path("groupchat/", new_groupChat, name="groupChat"),  # Group chat
     path("groupchat/<int:group_id>/", group_chat, name="groupchat"),  # Group chat interface
     path("profile/", profile, name="profile"),  # User profile
+    path("main/", home, name="main"),  # Home page
 ]
