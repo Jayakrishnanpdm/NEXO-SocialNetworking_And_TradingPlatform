@@ -126,7 +126,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
                 "sender_id": saved_message.sender.id,
                 "sender_name": saved_message.sender.username,
                 "timestamp": saved_message.timestamp.isoformat(),
-                "chat_id": self.conversation_id  # Include chat_id for frontend sorting
+                "chat_id": self.conversation.id  # Include chat_id for frontend sorting
             }
         )
 

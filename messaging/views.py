@@ -22,7 +22,7 @@ def get_or_create_conversation(request, user_id):
     
     messages = conversation.messages.all()
     users=User.objects.all().exclude(id=request.user.id)
-    group_chats = Conversation.objects.filter(is_groupchat=True, participants=request.user)
+    group_chats = Conversation.objects.filter(is_groupchat=True, participants=request.user).order_by("-id")
     now = timezone.now() 
     return render(request, "networking/chat.html", {
         "conversation": conversation, 
@@ -150,4 +150,3 @@ def send_group_message(request, conversation_id):
 
 def profile(request):
     return render(request, "networking/profile.html")
-
