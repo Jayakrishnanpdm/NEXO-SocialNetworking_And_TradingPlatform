@@ -1115,6 +1115,27 @@ ul{
 }
 
 /* Seller Form */
+
+.sell-History {
+  position: absolute;
+  right: 20px;
+  top: 20%;
+  transform: translateY(-50%);
+  background-color: #057c09;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.sell-History:hover {
+  background-color: #064708;
+}
+
 #seller-form .form-container {
   max-width: 600px;
   margin: 20px auto;
@@ -1392,6 +1413,7 @@ select{
   justify-content: flex-start;
   transition: background 0.3s ease, border 0.3s ease;
   font-weight: bold;
+
 }
 
 /* Hover effect */
@@ -1451,3 +1473,4 @@ select{
 .hidden {
   display: none;
 }
+

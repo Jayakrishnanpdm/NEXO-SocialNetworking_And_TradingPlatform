@@ -346,6 +346,9 @@ main .container .left{
     overflow: hidden;
     margin: 0.7rem 0;
 }
+#message-search{
+    background-color: var(--color-white);
+}
 
 .profile .feed .action-buttons{
     display: flex;

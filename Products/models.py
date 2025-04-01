@@ -1,6 +1,7 @@
 from django.db import models
 from django.db import models
 from home.models import Seller
+from Customer.models import Customer
 # Create your models here.
 
 class Product(models.Model):
@@ -8,6 +9,10 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.FloatField()
     seller=models.ForeignKey(Seller,on_delete=models.CASCADE,related_name='products',null=True)
+    reciever=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='reciever',null=True)
+    recieved = models.BooleanField(default=False)
+    sold_date = models.DateTimeField(null=True, blank=True)
+    sold = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
     digital = models.BooleanField(default=False, null=True, blank=True)
     description = models.TextField()

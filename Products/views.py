@@ -6,7 +6,7 @@ from .models import Product, ProductImage
 def products(request):
     # Fetch all products with their first image
     products_with_images = []
-    for product in Product.objects.all():
+    for product in Product.objects.all().exclude(sold=True):
         first_image = product.images.first()  # Use the related_name 'images' to get images
         products_with_images.append({
             'product': product,

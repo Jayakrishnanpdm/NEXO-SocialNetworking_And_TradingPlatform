@@ -100,7 +100,7 @@ def orderConfirm(request):
 def previousOrders(request):
     user = request.user.customer_profile
     pending_orders = Order.objects.filter(customer=user, complete=True).exclude(status__in=[Order.CART_STAGE, Order.ORDER_DELIVERED])
-    delivered_orders = Order.objects.filter(customer=user, status=Order.ORDER_DELIVERED)
+    delivered_orders = Order.objects.filter(customer=user, status=Order.ORDER_DELIVERED).order_by('-delivered_date')
     context={'pending_orders':pending_orders,'delivered_orders':delivered_orders}
     return render(request,'previous_orders.html',context)
 
@@ -119,6 +119,14 @@ def update_order_status(request, order_id):
             order.status = Order.ORDER_DELIVERED
             order.delivered_date = datetime.now()
             order.save()
+
+            for item in order.items.all():
+                item.product.sold=True
+                item.product.recieved=True
+                item.product.reciever=order.customer
+                item.product.sold_date=datetime.now()
+                item.product.save()
+
 
             items = []
             for item in order.items.all():
