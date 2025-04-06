@@ -81,7 +81,8 @@ def group_chat(request, group_id):
         # Check if the group has expired
     # only shows popup if extension_pending is True
         conversation.extension_pending = True
-        conversation.extension_popup_shown = True  # Avoid repeated popups  
+        conversation.extension_popup_shown = True  # Avoid repeated popups
+        conversation.save()  
 
     context = {
         'conversation': conversation,
@@ -216,8 +217,10 @@ def handle_extension_decision(request, conversation_id):
 
         conversation.timespan_type = new_type
         conversation.timespan_value = new_value
+        conversation.start_time = timezone.now()
         conversation.extension_pending = False
         conversation.extension_asked_at = None
+
         conversation.save()
 
         delay = (conversation.expiry_at - timezone.now()).total_seconds()

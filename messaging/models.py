@@ -21,6 +21,7 @@ class Conversation(models.Model):
     timespan_type = models.CharField(max_length=10, choices=TIMESLOT_CHOICES, default="none")
     timespan_value = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField(default=timezone.now)
     expiry_at = models.DateTimeField(null=True, blank=True)
     extension_pending = models.BooleanField(default=False)
     extension_asked_at = models.DateTimeField(null=True, blank=True)  # When we asked the admin

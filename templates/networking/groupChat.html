@@ -135,7 +135,7 @@
     
         if (expiryTimeRaw) {
             const expiryTime = new Date(expiryTimeRaw).getTime();
-            const totalDuration = expiryTime - new Date("{{ conversation.created_at|timezone:'UTC'|date:'c' }}").getTime();
+            const totalDuration = expiryTime - new Date("{{ conversation.start_time|timezone:'UTC'|date:'c' }}").getTime();
     
             const updateCountdown = () => {
                 const now = new Date().getTime();
