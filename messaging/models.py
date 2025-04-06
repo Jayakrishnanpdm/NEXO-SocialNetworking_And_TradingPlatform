@@ -22,6 +22,11 @@ class Conversation(models.Model):
     timespan_value = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     expiry_at = models.DateTimeField(null=True, blank=True)
+    extension_pending = models.BooleanField(default=False)
+    extension_asked_at = models.DateTimeField(null=True, blank=True)  # When we asked the admin
+    extension_popup_shown = models.BooleanField(default=False)
+
+
 
     def save(self, *args, **kwargs):
         """Set the expiry_at field based on timespan_type and timespan_value"""

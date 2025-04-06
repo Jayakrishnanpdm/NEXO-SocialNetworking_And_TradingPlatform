@@ -148,3 +148,11 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
         sender = User.objects.get(id=sender_id)
         conversation = Conversation.objects.get(id=group_id)
         return Message.objects.create(conversation=conversation, sender=sender, content=content)
+    
+    # In your consumer.py or routing logic
+    async def extension_popup(self, event):
+        await self.send_json({
+            'type': 'show_extension_popup',
+            'conversation_id': event['conversation_id'],
+            'message': event['message'],
+    })
