@@ -545,6 +545,45 @@ main .container .left .profile{
     cursor: pointer;
 }
 
+#messageInput:disabled {
+    background-color: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+}
+#sendMessage:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.countdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: auto;
+    margin-right: 0;
+    gap: 4px;
+}
+
+.countdown-bar-wrapper {
+    width: 100px;
+    height: 6px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.countdown-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #4caf50; /* green by default */
+    transition: width 1s linear, background-color 0.3s ease;
+}
+
+#countdown {
+    color: grey;
+    font-size: 14px;
+}
+
 
 /*-----------theme customizer------------*/
 

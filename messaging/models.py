@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import timedelta
 from django.utils import timezone
+from .tasks import disband_expired_group
+from celery import shared_task
 
 class Conversation(models.Model):
     TIMESLOT_CHOICES = [
@@ -22,26 +24,33 @@ class Conversation(models.Model):
     expiry_at = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        """Calculate expiry time before saving"""
-        if not self.pk:  # If new object, set expiry_at
+        """Set the expiry_at field based on timespan_type and timespan_value"""
+        # Check if this is a new instance (not yet saved to the database)
+        is_new = self.pk is None
+
+        if is_new:
             now = timezone.now()
             if self.timespan_type == "hours":
                 self.expiry_at = now + timedelta(hours=self.timespan_value)
             elif self.timespan_type == "days":
                 self.expiry_at = now + timedelta(days=self.timespan_value)
             elif self.timespan_type == "months":
-                self.expiry_at = now + timedelta(days=self.timespan_value * 30)  # Approximate
+                self.expiry_at = now + timedelta(days=self.timespan_value * 30)  # Approximation
             else:
-                self.expiry_at = None  # No expiry for "none" option
+                self.expiry_at = None  # No expiry for "none"
 
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  # Save after setting expiry_at
+
+        if is_new and self.expiry_at:
+            delay = (self.expiry_at - timezone.now()).total_seconds()
+            disband_expired_group.apply_async((self.id,), countdown=delay)
+        print(f"Group created with expiry_at: {self.expiry_at} | Now: {timezone.now()}")
 
     def has_expired(self):
-        """Check if the group has expired"""
-        return self.expiry_at is not None and timezone.now() >= self.expiry_at
-
-    def __str__(self):
-        return f"Group: {self.groupname} (Expires: {self.expiry_at if self.expiry_at else 'Never'})"
+        if self.expiry_at:
+            return timezone.now() >= self.expiry_at
+        return False    
+    
 
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="messages")

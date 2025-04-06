@@ -26,14 +26,15 @@
 
     <div class="time-span">
         <label for="timespanType"><strong>Select Timespan Type:</strong></label>
-        <select id="timespanType" style="border-radius: 10px;">
+        <select id="timespanType" name="timespan_type" style="border-radius: 10px;" onchange="showTimespanInput()">
             <option value="none">None</option>
             <option value="months">Months</option>
             <option value="days">Days</option>
             <option value="hours">Hours</option>
         </select>
-        <input type="number" id="timespanInput" placeholder="Enter value" min="1" name="timespan" style="display: none;">
+        <input type="number" id="timespanInput" name="timespan_value" placeholder="Enter value" min="1" style="display: none;">
     </div>
+    
 
     <button id="createGroupBtn" type="submit">Create Group</button>
     <button id="closeGroupForm">Cancel</button>

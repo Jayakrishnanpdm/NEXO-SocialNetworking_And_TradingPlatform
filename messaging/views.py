@@ -90,6 +90,8 @@ def new_groupChat(request):
         group_name = request.POST.get("group_name")
         group_pic = request.FILES.get("group_pic")
         members = request.POST.get("group_members")  # Comma-separated user list
+        timespan_type = request.POST.get("timespan_type")
+        timespan_value = request.POST.get("timespan_value")
         
         if not group_name:
             return render(request, "networking/groupChat.html", {"error": "Group name cannot be empty"})
@@ -98,7 +100,10 @@ def new_groupChat(request):
         conversation = Conversation.objects.create(
             is_groupchat=True,
             groupname=group_name,
-            creator=request.user  
+            creator=request.user,
+            timespan_type=timespan_type if timespan_type else "none",  # Default to "none" if not provided
+            timespan_value=int(timespan_value) if timespan_value else 1,  # Ensure it's an integer
+             
         )
 
         if group_pic:
@@ -138,7 +143,7 @@ def new_groupChat(request):
 @login_required
 def send_group_message(request, conversation_id):
     """ Send a message to the group chat """
-    conversation = get_object_or_404(Conversation, id=conversation_id, is_group_chat=True)
+    conversation = get_object_or_404(Conversation, id=conversation_id, is_groupchat=True)
     content = request.POST.get("content")
 
     if content:

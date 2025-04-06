@@ -25,8 +25,13 @@
                             Tap here for group info
                         </h6>                        
                     </div>
-                    <span id="chatTimer" style="color: grey; font-size: 14px; margin-left: auto;">00:00</span>
-                </div>
+                    <div class="countdown-container">
+                        <div class="countdown-bar-wrapper">
+                            <div class="countdown-bar" id="countdownProgressBar"></div>
+                        </div>
+                        <span id="countdown" title="Expires at {{ conversation.expiry_at|date:'M d, Y h:i A' }}"></span>
+                    </div>
+                </div>   
 
                 <div id="groupBox">
                     <div class="group-header">
@@ -108,5 +113,78 @@
 <div id="groupId" data-groupid="{{ conversation.id }}"></div>
     <script src="{% static 'js/groupChat.js' %}"></script>
 
+    <script>
+        const expiryTimeRaw = "{{ conversation.expiry_at|default_if_none:''|timezone:'UTC'|date:'c' }}";
+        const countdownElement = document.getElementById("countdown");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendMessage");
+        const progressBar = document.getElementById("countdownProgressBar");
+        const progressBarWrapper = document.querySelector(".countdown-bar-wrapper");
+    
+        // Lock and unlock message input
+        const lockMessageInput = () => {
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+            messageInput.placeholder = "Group Expired!";
+        };
+    
+        const unlockMessageInput = () => {
+            messageInput.disabled = false;
+            sendButton.disabled = false;
+            messageInput.placeholder = "Type a message...";
+        };
+    
+        if (expiryTimeRaw) {
+            const expiryTime = new Date(expiryTimeRaw).getTime();
+            const totalDuration = expiryTime - new Date("{{ conversation.created_at|timezone:'UTC'|date:'c' }}").getTime();
+    
+            const updateCountdown = () => {
+                const now = new Date().getTime();
+                const distance = expiryTime - now;
+    
+                if (distance <= 0) {
+                    countdownElement.innerHTML = "⛔ Group Expired!";
+                    countdownElement.style.color = "red";
+                    lockMessageInput();
+                    progressBar.style.width = "100%";
+                    progressBar.style.backgroundColor = "red";
+                    return;
+                }
+    
+                const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((distance / (1000 * 60)) % 60);
+                const seconds = Math.floor((distance / 1000) % 60);
+    
+                countdownElement.innerHTML =
+                    `${hours.toString().padStart(2, '0')}h ` +
+                    `${minutes.toString().padStart(2, '0')}m ` +
+                    `${seconds.toString().padStart(2, '0')}s`;
+    
+                countdownElement.style.color = distance <= 60000 ? "red" : "grey";
+    
+                // Update progress bar
+                const percentComplete = ((totalDuration - distance) / totalDuration) * 100;
+                progressBar.style.width = `${percentComplete}%`;
+    
+                if (distance <= totalDuration * 0.25) {
+                    progressBar.style.backgroundColor = "red";
+                }
+            };
+    
+            // Start countdown
+            unlockMessageInput();
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        } else {
+            // Non-expiry group: Hide both timer and progress bar
+            countdownElement.style.display = "none";
+            if (progressBarWrapper) {
+                progressBarWrapper.style.display = "none";
+            }
+            unlockMessageInput();  // Keep input enabled
+        }
+    </script>
+    
+    
 </body>
 </html>

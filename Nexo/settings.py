@@ -182,3 +182,23 @@ CHANNEL_LAYERS = {
 TIME_ZONE = 'Asia/Kolkata'  # India Standard Time (UTC+5:30)
 USE_TZ = True  # Keep this True for timezone-aware datetime
 
+# Chat encryption settings
+import os
+import base64
+from dotenv import load_dotenv
+
+load_dotenv()
+AES_SECRET_KEY = "mUdV9wJqqWS7swqOJwlnlPOxKwIvbE57ujk7hQflYLs="  # 32 bytes key for AES-256
+AES_SECRET_KEY = base64.b64decode(AES_SECRET_KEY)  # Decode the base64 key
+
+# Celery settings
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Redis must be running
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+
+
+
+
+
