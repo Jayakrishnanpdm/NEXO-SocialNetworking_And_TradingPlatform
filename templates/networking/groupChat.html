@@ -112,7 +112,7 @@
 <div id="userId" data-userid="{{ request.user.id }}"></div>
 <div id="groupId" data-groupid="{{ conversation.id }}"></div>
     <script src="{% static 'js/groupChat.js' %}"></script>
-
+    
     <script>
         const expiryTimeRaw = "{{ conversation.expiry_at|default_if_none:''|timezone:'UTC'|date:'c' }}";
         const countdownElement = document.getElementById("countdown");
@@ -121,7 +121,6 @@
         const progressBar = document.getElementById("countdownProgressBar");
         const progressBarWrapper = document.querySelector(".countdown-bar-wrapper");
     
-        // Lock and unlock message input
         const lockMessageInput = () => {
             messageInput.disabled = true;
             sendButton.disabled = true;
@@ -162,7 +161,6 @@
     
                 countdownElement.style.color = distance <= 60000 ? "red" : "grey";
     
-                // Update progress bar
                 const percentComplete = ((totalDuration - distance) / totalDuration) * 100;
                 progressBar.style.width = `${percentComplete}%`;
     
@@ -171,19 +169,67 @@
                 }
             };
     
-            // Start countdown
             unlockMessageInput();
             setInterval(updateCountdown, 1000);
             updateCountdown();
         } else {
-            // Non-expiry group: Hide both timer and progress bar
             countdownElement.style.display = "none";
             if (progressBarWrapper) {
                 progressBarWrapper.style.display = "none";
             }
-            unlockMessageInput();  // Keep input enabled
+            unlockMessageInput();
         }
     </script>
+    
+    <!-- ✅ INSERT THIS RIGHT AFTER THE ABOVE SCRIPT -->
+    {% if conversation.extension_pending %}
+        {% if request.user.id == conversation.creator.id %}
+            <script>
+                const decision = confirm("Your group has expired. Do you want to extend it?");
+                if (decision) {
+                    const new_type = prompt("Enter new timespan type (hours, days, months):", "hours");
+                    const new_value = prompt("Enter new duration (e.g., 2 for 2 hours):", "1");
+    
+                    fetch("{% url 'handle_extension_decision' conversation.id %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: `decision=extend&new_type=${new_type}&new_value=${new_value}`
+                    }).then(response => location.reload());
+                } else {
+                    fetch("{% url 'handle_extension_decision' conversation.id %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: `decision=decline`
+                    }).then(response => location.reload());
+                }
+            </script>
+        {% else %}
+            <script>
+                lockMessageInput();
+                document.getElementById("countdown").innerHTML = "Waiting for admin to extend the group...";
+            </script>
+        {% endif %}
+    {% endif %}
+    
+        {% if conversation.extension_accepted %}
+            <script>
+                unlockMessageInput();
+                document.getElementById("countdown").innerHTML = "Group has been extended!";
+            </script>
+        {% endif %}
+
+        {% if conversation.extension_declined %}
+            <script>
+                lockMessageInput();
+                document.getElementById("countdown").innerHTML = "Group extension declined!";
+            </script>
+        {% endif %}   
     
     
 </body>
